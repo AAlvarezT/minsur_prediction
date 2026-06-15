@@ -217,6 +217,8 @@ mlflow ui --backend-store-uri mlruns
 # Open http://localhost:5000
 ```
 
+Note: in `mlruns/`, folder names are internal MLflow IDs by design. Use the MLflow UI to see descriptive experiment names and run names.
+
 ---
 
 ## Requirements

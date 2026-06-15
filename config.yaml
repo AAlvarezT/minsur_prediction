@@ -132,5 +132,5 @@ explainability:
 # MLflow
 # -----------------------------------------------------------
 mlflow:
-  experiment_name: "minsur-silica-prediction"
+  experiment_name: "MINSUR Silica Prediction - Temporal Modeling"
   tracking_uri: "mlruns"
