@@ -14,7 +14,10 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-from src.config import CFG
+try:
+    from .config import CFG
+except ImportError:
+    from config import CFG
 
 
 # ---------------------------------------------------------------------------

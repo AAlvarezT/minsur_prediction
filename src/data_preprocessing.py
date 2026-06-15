@@ -10,11 +10,60 @@ Design principles:
 """
 
 from pathlib import Path
+import shutil
 
 import numpy as np
 import pandas as pd
 
-from src.config import CFG
+try:
+    from .config import CFG
+except ImportError:
+    from config import CFG
+
+
+def _download_raw_from_kagglehub(raw_path: Path) -> Path:
+    """Download dataset via kagglehub and copy the CSV to data/raw/.
+
+    Parameters
+    ----------
+    raw_path : Path
+        Expected destination CSV path under data/raw/.
+
+    Returns
+    -------
+    Path
+        Path to the downloaded (or copied) CSV in data/raw/.
+    """
+    try:
+        import kagglehub
+    except ImportError as exc:
+        raise ImportError(
+            "kagglehub is not installed. Install it with: pip install kagglehub"
+        ) from exc
+
+    dataset_dir = Path(
+        kagglehub.dataset_download("edumagalhaes/quality-prediction-in-a-mining-process")
+    )
+
+    csv_candidates = sorted(dataset_dir.rglob("*.csv"))
+    if not csv_candidates:
+        raise FileNotFoundError(
+            f"KaggleHub download succeeded but no CSV file was found in: {dataset_dir}"
+        )
+
+    source_csv = None
+    for candidate in csv_candidates:
+        if "mining" in candidate.name.lower() or "flotation" in candidate.name.lower():
+            source_csv = candidate
+            break
+    if source_csv is None:
+        source_csv = csv_candidates[0]
+
+    raw_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source_csv, raw_path)
+    print(f"[data_preprocessing] Downloaded dataset from KaggleHub: {source_csv}")
+    print(f"[data_preprocessing] Copied CSV to: {raw_path}")
+    return raw_path
 
 
 # ---------------------------------------------------------------------------
@@ -42,10 +91,11 @@ def load_raw_data(cfg: dict | None = None) -> pd.DataFrame:
     raw_path = Path(cfg["paths"]["data_raw"]) / cfg["data"]["raw_filename"]
 
     if not raw_path.exists():
-        raise FileNotFoundError(
-            f"Raw file not found: {raw_path}\n"
-            "Place the Kaggle CSV in data/raw/ before running the pipeline."
+        print(
+            "[data_preprocessing] Raw CSV not found in data/raw/. "
+            "Attempting auto-download via kagglehub..."
         )
+        raw_path = _download_raw_from_kagglehub(raw_path)
 
     df = pd.read_csv(raw_path, sep=",", decimal=",", dayfirst=False)
     return df

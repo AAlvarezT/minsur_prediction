@@ -18,7 +18,10 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
-from src.config import CFG
+try:
+    from .config import CFG
+except ImportError:
+    from config import CFG
 
 
 # ---------------------------------------------------------------------------

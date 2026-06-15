@@ -18,8 +18,12 @@ from sklearn.dummy import DummyRegressor
 from sklearn.linear_model import Ridge
 from sklearn.ensemble import RandomForestRegressor
 
-from src.config import CFG
-from src.evaluate import compute_metrics
+try:
+    from .config import CFG
+    from .evaluate import compute_metrics
+except ImportError:
+    from config import CFG
+    from evaluate import compute_metrics
 
 # Optional heavy models — imported lazily so the project works without them
 try:

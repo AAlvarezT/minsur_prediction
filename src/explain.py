@@ -18,7 +18,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from src.config import CFG
+try:
+    from .config import CFG
+except ImportError:
+    from config import CFG
 
 # SHAP import — required
 try:

@@ -12,8 +12,12 @@ from typing import Dict, List
 import numpy as np
 import pandas as pd
 
-from src.config import CFG
-from src.train import load_model
+try:
+    from .config import CFG
+    from .train import load_model
+except ImportError:
+    from config import CFG
+    from train import load_model
 
 
 # ---------------------------------------------------------------------------
