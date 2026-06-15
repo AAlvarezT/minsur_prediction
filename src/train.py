@@ -10,6 +10,9 @@ until final evaluation in evaluate.py / notebooks).
 
 from pathlib import Path
 from typing import Any, Dict, Tuple
+import os
+import json
+from datetime import datetime, timezone
 
 import joblib
 import numpy as np
@@ -240,6 +243,75 @@ def load_model(folder: str = "selected", cfg: dict | None = None, filename: str 
     return model
 
 
+def _to_jsonable(value: Any) -> Any:
+    """Convert common Python / NumPy objects into JSON-serialisable values."""
+    if isinstance(value, Path):
+        return str(value)
+    if isinstance(value, (np.integer, np.floating)):
+        return value.item()
+    if isinstance(value, np.ndarray):
+        return value.tolist()
+    if isinstance(value, (list, tuple)):
+        return [_to_jsonable(v) for v in value]
+    if isinstance(value, dict):
+        return {str(k): _to_jsonable(v) for k, v in value.items()}
+    return value
+
+
+def extract_model_params(model: Any) -> Dict[str, Any]:
+    """Return a JSON-friendly dictionary with the main model parameters."""
+    if not hasattr(model, "get_params"):
+        return {}
+
+    params = model.get_params(deep=False)
+    clean_params: Dict[str, Any] = {}
+    for key, value in params.items():
+        try:
+            json.dumps(_to_jsonable(value))
+            clean_params[key] = _to_jsonable(value)
+        except TypeError:
+            clean_params[key] = str(value)
+    return clean_params
+
+
+def append_experiment_log(
+    record: Dict[str, Any],
+    cfg: dict | None = None,
+    filename: str = "experiment_log.csv",
+) -> Path:
+    """Append one experiment-traceability row to a local CSV fallback log."""
+    cfg = cfg or CFG
+    out_path = Path(cfg["paths"]["reports_metrics"]) / filename
+    row = {key: _to_jsonable(value) for key, value in record.items()}
+
+    if out_path.exists():
+        existing = pd.read_csv(out_path)
+        updated = pd.concat([existing, pd.DataFrame([row])], ignore_index=True)
+    else:
+        updated = pd.DataFrame([row])
+
+    updated.to_csv(out_path, index=False)
+    print(f"[train] Local experiment log updated: {out_path}")
+    return out_path
+
+
+def save_selected_model_metadata(
+    metadata: Dict[str, Any],
+    cfg: dict | None = None,
+    filename: str = "selected_model_metadata.json",
+) -> Path:
+    """Persist selected-model metadata for reproducible inference/explainability."""
+    cfg = cfg or CFG
+    out_path = Path(cfg["paths"]["models_selected"]) / filename
+    payload = _to_jsonable(metadata)
+
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, ensure_ascii=False)
+
+    print(f"[train] Selected-model metadata saved to: {out_path}")
+    return out_path
+
+
 # ---------------------------------------------------------------------------
 # 5. MLflow experiment tracking (optional)
 # ---------------------------------------------------------------------------
@@ -250,31 +322,110 @@ def log_to_mlflow(
     train_metrics: Dict[str, float],
     val_metrics: Dict[str, float],
     cfg: dict | None = None,
-) -> None:
+    scenario_name: str | None = None,
+    test_metrics: Dict[str, float] | None = None,
+    feature_columns: list[str] | None = None,
+    model_path: str | Path | None = None,
+    artifact_paths: list[str | Path] | None = None,
+    extra_params: Dict[str, Any] | None = None,
+    tags: Dict[str, Any] | None = None,
+    run_name: str | None = None,
+) -> Dict[str, Any]:
     """Log model, parameters, and metrics to an MLflow experiment.
 
-    Fails silently if mlflow is not installed.
+    Returns a status dictionary so notebooks can communicate whether MLflow
+    tracking succeeded or whether local CSV/JSON fallback should be used.
     """
     try:
         import mlflow
         import mlflow.sklearn
-    except ImportError:
-        print("[train] mlflow not installed — skipping tracking.")
-        return
+    except Exception as exc:
+        message = f"MLflow tracking unavailable; local CSV/JSON fallback should be used. Reason: {exc}"
+        print(f"[train] {message}")
+        return {"status": "fallback_local", "message": message}
 
     cfg = cfg or CFG
     mlflow_cfg = cfg.get("mlflow", {})
-    mlflow.set_tracking_uri(str(Path(cfg["paths"]["mlruns"]).parent / mlflow_cfg.get("tracking_uri", "mlruns")))
-    mlflow.set_experiment(mlflow_cfg.get("experiment_name", "minsur"))
+    project_name = cfg.get("project", {}).get("name", "minsur-quality-prediction")
 
-    with mlflow.start_run(run_name=model_name):
-        mlflow.log_param("model_class", type(model).__name__)
-        for k, v in train_metrics.items():
-            mlflow.log_metric(f"train_{k}", v)
-        for k, v in val_metrics.items():
-            mlflow.log_metric(f"val_{k}", v)
-        try:
-            mlflow.sklearn.log_model(model, artifact_path="model")
-        except Exception:
-            pass  # some models (e.g. LightGBM) need mlflow.lightgbm
-    print(f"[train] MLflow run logged for: {model_name}")
+    configured_experiment_name = mlflow_cfg.get("experiment_name")
+    legacy_names = {"minsur", "minsur-silica-prediction"}
+    if configured_experiment_name and configured_experiment_name not in legacy_names:
+        experiment_name = configured_experiment_name
+    else:
+        experiment_name = "MINSUR Silica Prediction - Temporal Modeling"
+
+    tracking_uri_cfg = str(mlflow_cfg.get("tracking_uri", "mlruns"))
+
+    # MLflow 3.x blocks file-store by default. For local notebook/project workflows
+    # we explicitly opt in when using a filesystem URI.
+    if "://" not in tracking_uri_cfg:
+        local_tracking_path = Path(cfg["paths"].get("mlruns", tracking_uri_cfg))
+        local_tracking_path.mkdir(parents=True, exist_ok=True)
+        os.environ.setdefault("MLFLOW_ALLOW_FILE_STORE", "true")
+        mlflow.set_tracking_uri(str(local_tracking_path))
+    else:
+        mlflow.set_tracking_uri(tracking_uri_cfg)
+
+    mlflow.set_experiment(experiment_name)
+
+    run_timestamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    run_name = run_name or f"{project_name} | {scenario_name or 'scenario-na'} | {model_name} | {run_timestamp}"
+    artifact_paths = artifact_paths or []
+    extra_params = extra_params or {}
+    tags = tags or {}
+
+    try:
+        with mlflow.start_run(run_name=run_name) as run:
+            mlflow.set_tag("project", project_name)
+            mlflow.set_tag("model_name", model_name)
+            if scenario_name is not None:
+                mlflow.set_tag("scenario", scenario_name)
+            for key, value in tags.items():
+                mlflow.set_tag(str(key), _to_jsonable(value))
+
+            mlflow.log_param("experiment_name", experiment_name)
+            mlflow.log_param("model_name", model_name)
+            mlflow.log_param("model_class", type(model).__name__)
+            if scenario_name is not None:
+                mlflow.log_param("scenario", scenario_name)
+            if feature_columns is not None:
+                mlflow.log_param("n_features", len(feature_columns))
+                mlflow.log_dict({"feature_columns": feature_columns}, "feature_columns.json")
+            if model_path is not None:
+                mlflow.log_param("saved_model_path", str(model_path))
+
+            for key, value in extract_model_params(model).items():
+                mlflow.log_param(f"model_param__{key}", value)
+            for key, value in extra_params.items():
+                mlflow.log_param(str(key), _to_jsonable(value))
+
+            for k, v in train_metrics.items():
+                mlflow.log_metric(f"train_{k}", float(v))
+            for k, v in val_metrics.items():
+                mlflow.log_metric(f"val_{k}", float(v))
+            if test_metrics:
+                for k, v in test_metrics.items():
+                    mlflow.log_metric(f"test_{k}", float(v))
+
+            for artifact_path in artifact_paths:
+                artifact_path = Path(artifact_path)
+                if artifact_path.exists():
+                    mlflow.log_artifact(str(artifact_path))
+
+            try:
+                mlflow.sklearn.log_model(model, artifact_path="model")
+            except Exception:
+                pass
+
+        print(f"[train] MLflow run logged for: {model_name}")
+        return {
+            "status": "mlflow_logged",
+            "experiment_name": experiment_name,
+            "run_name": run_name,
+            "run_id": run.info.run_id,
+        }
+    except Exception as exc:
+        message = f"MLflow tracking failed; local CSV/JSON fallback should be used. Reason: {exc}"
+        print(f"[train] {message}")
+        return {"status": "fallback_local", "message": message}

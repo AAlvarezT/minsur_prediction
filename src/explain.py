@@ -12,11 +12,12 @@ made based solely on these explanations without domain expertise validation.
 """
 
 from pathlib import Path
-from typing import Tuple
+from typing import Any, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from sklearn.inspection import partial_dependence
 
 try:
     from .config import CFG
@@ -118,6 +119,25 @@ def compute_shap_values(
     return shap_array, X_sample
 
 
+def align_feature_frame(
+    X: pd.DataFrame,
+    expected_columns: list[str],
+    dataset_name: str = "features",
+) -> pd.DataFrame:
+    """Ensure a feature matrix matches the exact training feature schema."""
+    missing = [col for col in expected_columns if col not in X.columns]
+    extra = [col for col in X.columns if col not in expected_columns]
+
+    if missing or extra:
+        raise ValueError(
+            f"{dataset_name} does not match the training feature schema. "
+            f"Missing columns: {missing[:10]}{'...' if len(missing) > 10 else ''}. "
+            f"Unexpected columns: {extra[:10]}{'...' if len(extra) > 10 else ''}."
+        )
+
+    return X.loc[:, expected_columns].copy()
+
+
 # ---------------------------------------------------------------------------
 # 3. Global feature importance
 # ---------------------------------------------------------------------------
@@ -127,6 +147,44 @@ def mean_absolute_shap(shap_values: np.ndarray, feature_names: list[str]) -> pd.
     importance = np.abs(shap_values).mean(axis=0)
     df = pd.DataFrame({"feature": feature_names, "mean_abs_shap": importance})
     return df.sort_values("mean_abs_shap", ascending=False).reset_index(drop=True)
+
+
+def get_model_feature_importance(model: Any, feature_names: list[str]) -> pd.DataFrame:
+    """Return a comparable feature-importance table when the model exposes one."""
+    if hasattr(model, "feature_importances_"):
+        scores = np.asarray(model.feature_importances_)
+        metric_name = "importance"
+    elif hasattr(model, "coef_"):
+        scores = np.abs(np.ravel(model.coef_))
+        metric_name = "abs_coefficient"
+    else:
+        return pd.DataFrame(columns=["feature", "importance"])
+
+    df = pd.DataFrame({"feature": feature_names, metric_name: scores})
+    return df.sort_values(metric_name, ascending=False).reset_index(drop=True)
+
+
+def infer_shap_direction(
+    shap_values: np.ndarray,
+    X_sample: pd.DataFrame,
+    feature_name: str,
+) -> str:
+    """Summarise whether higher feature values are associated with higher or lower predictions."""
+    feature_idx = list(X_sample.columns).index(feature_name)
+    feature_values = X_sample.iloc[:, feature_idx].to_numpy()
+    shap_feature = shap_values[:, feature_idx]
+
+    if np.allclose(np.std(feature_values), 0) or np.allclose(np.std(shap_feature), 0):
+        return "No strong directional pattern observed"
+
+    corr = np.corrcoef(feature_values, shap_feature)[0, 1]
+    if np.isnan(corr):
+        return "No strong directional pattern observed"
+    if corr >= 0.15:
+        return "Higher values are linked to higher predicted silica"
+    if corr <= -0.15:
+        return "Higher values are linked to lower predicted silica"
+    return "Mixed or non-linear direction"
 
 
 # ---------------------------------------------------------------------------
@@ -185,7 +243,7 @@ def plot_shap_bar(
     plt.tight_layout()
 
     if save:
-        fig_path = Path(cfg["paths"]["reports_figures"]) / "shap_bar_importance.png"
+        fig_path = Path(cfg["paths"]["reports_figures"]) / "shap_bar.png"
         plt.savefig(fig_path, dpi=150, bbox_inches="tight")
         print(f"[explain] Saved: {fig_path}")
 
@@ -228,3 +286,79 @@ def plot_shap_waterfall(
         print(f"[explain] Saved: {fig_path}")
 
     plt.show()
+
+
+def select_explainability_cases(
+    y_true: pd.Series,
+    y_pred: np.ndarray,
+) -> dict[str, Any]:
+    """Pick low-error, high-error, and representative cases from a prediction set."""
+    df = pd.DataFrame({
+        "y_true": np.asarray(y_true),
+        "y_pred": np.asarray(y_pred),
+    }, index=y_true.index)
+    df["error"] = df["y_true"] - df["y_pred"]
+    df["abs_error"] = df["error"].abs()
+    df["distance_to_median_target"] = (df["y_true"] - df["y_true"].median()).abs()
+
+    return {
+        "low_error": df["abs_error"].idxmin(),
+        "high_error": df["abs_error"].idxmax(),
+        "representative": df["distance_to_median_target"].idxmin(),
+    }
+
+
+def build_local_explanations_table(
+    shap_values: np.ndarray,
+    X_sample: pd.DataFrame,
+    y_true: pd.Series,
+    y_pred: np.ndarray,
+    case_indices: dict[str, Any],
+    top_n: int = 5,
+) -> pd.DataFrame:
+    """Build a local-explanation summary table for selected cases."""
+    rows = []
+    index_lookup = {idx: pos for pos, idx in enumerate(X_sample.index)}
+
+    for case_label, case_index in case_indices.items():
+        pos = index_lookup[case_index]
+        contrib = pd.Series(shap_values[pos], index=X_sample.columns).sort_values()
+        top_negative = contrib.head(top_n)
+        top_positive = contrib.tail(top_n).sort_values(ascending=False)
+
+        rows.append({
+            "case_label": case_label,
+            "index": case_index,
+            "y_true": float(y_true.loc[case_index]),
+            "y_pred": float(y_pred[pos]),
+            "error": float(y_true.loc[case_index] - y_pred[pos]),
+            "abs_error": float(abs(y_true.loc[case_index] - y_pred[pos])),
+            "top_positive_drivers": "; ".join(
+                f"{feat} ({val:.4f})" for feat, val in top_positive.items()
+            ),
+            "top_negative_drivers": "; ".join(
+                f"{feat} ({val:.4f})" for feat, val in top_negative.items()
+            ),
+        })
+
+    return pd.DataFrame(rows)
+
+
+def compute_partial_dependence_curve(
+    model: Any,
+    X: pd.DataFrame,
+    feature_name: str,
+    grid_resolution: int = 30,
+) -> pd.DataFrame:
+    """Compute a one-feature partial dependence curve."""
+    pd_result = partial_dependence(
+        model,
+        X,
+        features=[feature_name],
+        grid_resolution=grid_resolution,
+        kind="average",
+    )
+    return pd.DataFrame({
+        "feature_value": pd_result["grid_values"][0],
+        "predicted_response": pd_result["average"][0],
+    })
