@@ -6,7 +6,7 @@
 project:
   name: "minsur-quality-prediction"
   description: "Mining Process Quality Prediction — % Silica Concentrate"
-  author: "Analytics Candidate"
+  author: "Arturo Alvarez de la Torre"
   version: "1.0.0"
 
 # -----------------------------------------------------------
