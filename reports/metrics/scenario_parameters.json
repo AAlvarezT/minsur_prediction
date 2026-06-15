@@ -1,0 +1,212 @@
+[
+  {
+    "scenario_name": "Amina Flow +5%",
+    "scenario_type": "manual_operational",
+    "modifications": {
+      "Amina Flow": {
+        "mode": "pct",
+        "value": 5.0
+      }
+    },
+    "note": "Manual collector adjustment scenario for predictive stress testing."
+  },
+  {
+    "scenario_name": "Amina Flow -5%",
+    "scenario_type": "manual_operational",
+    "modifications": {
+      "Amina Flow": {
+        "mode": "pct",
+        "value": -5.0
+      }
+    },
+    "note": "Manual collector adjustment scenario for predictive stress testing."
+  },
+  {
+    "scenario_name": "Starch Flow -5%",
+    "scenario_type": "manual_operational",
+    "modifications": {
+      "Starch Flow": {
+        "mode": "pct",
+        "value": -5.0
+      }
+    },
+    "note": "Manual depressant adjustment scenario for predictive stress testing."
+  },
+  {
+    "scenario_name": "Starch Flow +5%",
+    "scenario_type": "manual_operational",
+    "modifications": {
+      "Starch Flow": {
+        "mode": "pct",
+        "value": 5.0
+      }
+    },
+    "note": "Manual depressant adjustment scenario for predictive stress testing."
+  },
+  {
+    "scenario_name": "Ore Pulp pH +0.2",
+    "scenario_type": "manual_operational",
+    "modifications": {
+      "Ore Pulp pH": {
+        "mode": "abs_delta",
+        "value": 0.2
+      }
+    },
+    "note": "Manual pH adjustment scenario for predictive stress testing."
+  },
+  {
+    "scenario_name": "Ore Pulp pH -0.2",
+    "scenario_type": "manual_operational",
+    "modifications": {
+      "Ore Pulp pH": {
+        "mode": "abs_delta",
+        "value": -0.2
+      }
+    },
+    "note": "Manual pH adjustment scenario for predictive stress testing."
+  },
+  {
+    "scenario_name": "Flotation Column 02 Level +5%",
+    "scenario_type": "dynamic_operational",
+    "modifications": {
+      "Flotation Column 02 Level": {
+        "mode": "pct",
+        "value": 5.0
+      }
+    },
+    "note": "Dynamic scenario based on top SHAP operational features that exist in the dataset."
+  },
+  {
+    "scenario_name": "Flotation Column 02 Level -5%",
+    "scenario_type": "dynamic_operational",
+    "modifications": {
+      "Flotation Column 02 Level": {
+        "mode": "pct",
+        "value": -5.0
+      }
+    },
+    "note": "Dynamic scenario based on top SHAP operational features that exist in the dataset."
+  },
+  {
+    "scenario_name": "recent lab silica trend +0.2 pp",
+    "scenario_type": "lab_trend_feature",
+    "modifications": {
+      "% Silica Concentrate_lag_1": {
+        "mode": "abs_delta",
+        "value": 0.2
+      },
+      "% Silica Concentrate_lag_3": {
+        "mode": "abs_delta",
+        "value": 0.2
+      },
+      "% Silica Concentrate_lag_12": {
+        "mode": "abs_delta",
+        "value": 0.2
+      }
+    },
+    "note": "Availability / recent-lab-trend scenario. These features are not operational levers."
+  },
+  {
+    "scenario_name": "recent lab silica trend -0.2 pp",
+    "scenario_type": "lab_trend_feature",
+    "modifications": {
+      "% Silica Concentrate_lag_1": {
+        "mode": "abs_delta",
+        "value": -0.2
+      },
+      "% Silica Concentrate_lag_3": {
+        "mode": "abs_delta",
+        "value": -0.2
+      },
+      "% Silica Concentrate_lag_12": {
+        "mode": "abs_delta",
+        "value": -0.2
+      }
+    },
+    "note": "Availability / recent-lab-trend scenario. These features are not operational levers."
+  },
+  {
+    "scenario_name": "Lower predicted silica package",
+    "scenario_type": "combined_package",
+    "modifications": {
+      "Flotation Column 02 Level": {
+        "mode": "pct",
+        "value": -5.0
+      },
+      "Ore Pulp pH": {
+        "mode": "abs_delta",
+        "value": 0.2
+      },
+      "Amina Flow": {
+        "mode": "pct",
+        "value": -5.0
+      }
+    },
+    "note": "Combined package aligned with lower-prediction directions inferred from local sensitivity around the median case."
+  },
+  {
+    "scenario_name": "Higher predicted silica stress test",
+    "scenario_type": "combined_package",
+    "modifications": {
+      "Flotation Column 02 Level": {
+        "mode": "pct",
+        "value": 5.0
+      },
+      "Ore Pulp pH": {
+        "mode": "abs_delta",
+        "value": -0.2
+      },
+      "Amina Flow": {
+        "mode": "pct",
+        "value": 5.0
+      }
+    },
+    "note": "Combined stress test aligned with higher-prediction directions inferred from local sensitivity around the median case."
+  },
+  {
+    "scenario_name": "Conservative small-adjustment package",
+    "scenario_type": "combined_package",
+    "modifications": {
+      "Flotation Column 02 Level": {
+        "mode": "pct",
+        "value": -2.5
+      },
+      "Ore Pulp pH": {
+        "mode": "abs_delta",
+        "value": 0.1
+      },
+      "Amina Flow": {
+        "mode": "pct",
+        "value": -2.5
+      }
+    },
+    "note": "Smaller-magnitude package based on the same learned directions as the lower-prediction package."
+  },
+  {
+    "scenario_name": "Process drift warning scenario",
+    "scenario_type": "combined_package",
+    "modifications": {
+      "Flotation Column 02 Level": {
+        "mode": "pct",
+        "value": 2.5
+      },
+      "Ore Pulp pH": {
+        "mode": "abs_delta",
+        "value": -0.1
+      },
+      "Amina Flow": {
+        "mode": "pct",
+        "value": 2.5
+      },
+      "% Silica Concentrate_lag_1": {
+        "mode": "abs_delta",
+        "value": 0.2
+      },
+      "% Silica Concentrate_lag_3": {
+        "mode": "abs_delta",
+        "value": 0.2
+      }
+    },
+    "note": "Pattern-based drift warning scenario using adverse local directions and recent-lab-trend stress where available."
+  }
+]
