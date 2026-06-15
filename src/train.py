@@ -17,6 +17,7 @@ import pandas as pd
 from sklearn.dummy import DummyRegressor
 from sklearn.linear_model import Ridge
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import ExtraTreesRegressor
 
 try:
     from .config import CFG
@@ -62,6 +63,12 @@ def get_models(cfg: dict | None = None) -> Dict[str, Any]:
             min_samples_leaf=mcfg["random_forest"]["min_samples_leaf"],
             n_jobs=mcfg["random_forest"]["n_jobs"],
             random_state=rs,
+        ),
+        "Extra Trees Regressor": ExtraTreesRegressor(
+            n_estimators=300,
+            min_samples_leaf=5,
+            random_state=42,
+            n_jobs=-1,
         ),
     }
 
