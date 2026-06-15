@@ -217,17 +217,71 @@ def outlier_summary(df: pd.DataFrame, factor: float = 3.0) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 
 def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
-    """Remove exact duplicate rows (all columns identical).
+    """Remove exact duplicate rows only.
 
-    In a time-indexed DataFrame duplicate timestamps may represent sensor
-    glitches where the same reading was recorded twice.
+    IMPORTANT:
+    ---------
+    We intentionally do NOT collapse repeated timestamps here. Repeated timestamps
+    can represent multiple process snapshots falling into the same lab timestamp
+    bucket and should be handled via explicit temporal alignment/aggregation,
+    not as blind deduplication.
     """
     n_before = len(df)
-    df = df[~df.index.duplicated(keep="first")]
+    df = df[~df.duplicated(keep="first")]
     n_removed = n_before - len(df)
     if n_removed > 0:
-        print(f"[data_preprocessing] Removed {n_removed} duplicate rows.")
+        print(f"[data_preprocessing] Removed {n_removed} exact duplicated rows.")
     return df
+
+
+def align_to_modeling_frequency(
+    df: pd.DataFrame,
+    rule: str = "1h",
+    agg: str = "mean",
+) -> pd.DataFrame:
+    """Align data to a modeling frequency with explicit temporal aggregation.
+
+    Why this exists:
+    ----------------
+    In this dataset, process measurements can appear at a finer granularity than
+    target lab updates. If we keep all rows as-is, many rows may share the same
+    effective target timestamp. This function performs an explicit alignment step
+    so each modeled row corresponds to one time bucket.
+
+    Parameters
+    ----------
+    df : pd.DataFrame with DatetimeIndex
+    rule : str
+        Pandas offset alias for target modeling frequency (e.g. "1h").
+    agg : str
+        Aggregation for numeric variables within each bucket ("mean" or "median").
+
+    Returns
+    -------
+    pd.DataFrame
+        Time-aligned DataFrame with one row per modeling interval.
+    """
+    if not isinstance(df.index, pd.DatetimeIndex):
+        raise ValueError("align_to_modeling_frequency requires a DatetimeIndex.")
+
+    if agg not in {"mean", "median"}:
+        raise ValueError("agg must be either 'mean' or 'median'.")
+
+    n_before = len(df)
+    numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+    grouped = df[numeric_cols].groupby(pd.Grouper(freq=rule))
+    if agg == "mean":
+        aligned = grouped.mean()
+    else:
+        aligned = grouped.median()
+
+    aligned = aligned.dropna(how="all")
+    n_after = len(aligned)
+    print(
+        f"[data_preprocessing] Temporal alignment applied: rule={rule}, agg={agg}. "
+        f"Rows {n_before} -> {n_after}."
+    )
+    return aligned
 
 
 # ---------------------------------------------------------------------------
@@ -266,6 +320,8 @@ def run_preprocessing_pipeline(cfg: dict | None = None) -> pd.DataFrame:
     """
     cfg = cfg or CFG
     interim_path = Path(cfg["paths"]["data_interim"]) / "data_cleaned.parquet"
+    modeling_rule = cfg.get("data", {}).get("modeling_frequency", "1h")
+    modeling_agg = cfg.get("data", {}).get("modeling_aggregation", "mean")
 
     df = load_raw_data(cfg)
     df = normalize_column_names(df)
@@ -276,6 +332,9 @@ def run_preprocessing_pipeline(cfg: dict | None = None) -> pd.DataFrame:
     for col in df.columns:
         if df[col].dtype == object:
             df[col] = pd.to_numeric(df[col].str.replace(",", "."), errors="coerce")
+
+    # Explicit temporal alignment for modeling (instead of implicit timestamp dedup)
+    df = align_to_modeling_frequency(df, rule=modeling_rule, agg=modeling_agg)
 
     saved = False
     save_errors: list[str] = []

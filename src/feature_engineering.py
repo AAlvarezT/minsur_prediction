@@ -176,6 +176,7 @@ def build_features(
     df: pd.DataFrame,
     cfg: dict | None = None,
     include_target_lags: bool = True,
+    include_feed_features: bool = True,
 ) -> pd.DataFrame:
     """Orchestrate all feature engineering steps on a given split.
 
@@ -194,6 +195,10 @@ def build_features(
     include_target_lags : bool
         Whether to add lagged values of the target. Set to False for strict
         no-leakage baseline comparisons.
+    include_feed_features : bool
+        Whether to include `% Iron Feed` and `% Silica Feed` as predictors.
+        Useful for sensitivity analysis when their real-time availability is
+        uncertain operationally.
 
     Returns
     -------
@@ -206,8 +211,9 @@ def build_features(
     rolling_windows = cfg["feature_engineering"]["rolling_windows"]
 
     fg = cfg["feature_groups"]
+    feed_cols = fg["feed"] if include_feed_features else []
     operational_cols = (
-        fg["feed"] + fg["flow"] + fg["pulp"] + fg["flotation_columns"]
+        feed_cols + fg["flow"] + fg["pulp"] + fg["flotation_columns"]
     )
 
     df = add_temporal_features(df)
@@ -286,6 +292,8 @@ def run_feature_engineering_pipeline(
     df_clean: pd.DataFrame,
     cfg: dict | None = None,
     save: bool = True,
+    include_target_lags: bool = True,
+    include_feed_features: bool = True,
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame,
            pd.Series, pd.Series, pd.Series]:
     """Full pipeline: build features → split → prepare X/y → save.
@@ -300,7 +308,12 @@ def run_feature_engineering_pipeline(
     processed_path = Path(cfg["paths"]["data_processed"])
 
     # 1. Engineer features on the full dataset (preserving temporal order)
-    df_feat = build_features(df_clean, cfg=cfg)
+    df_feat = build_features(
+        df_clean,
+        cfg=cfg,
+        include_target_lags=include_target_lags,
+        include_feed_features=include_feed_features,
+    )
 
     # 2. Temporal split
     train_df, val_df, test_df = temporal_split(
