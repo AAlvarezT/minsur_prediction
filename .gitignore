@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data files — raw data is NOT versioned
+data/raw/*.csv
+data/raw/*.xlsx
+data/raw/*.parquet
+data/interim/*.csv
+data/interim/*.parquet
+data/processed/*.csv
+data/processed/*.parquet
+
+# Models — large binaries not versioned (only keep selected)
+models/baseline/*.pkl
+models/selected/*.pkl
+
+# Reports — generated figures not versioned
+reports/figures/*.png
+reports/figures/*.pdf
+reports/metrics/*.csv
+
+# MLflow artifacts
+mlruns/
+
+# Secrets / credentials
+.env
+*.env
+kaggle.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/settings.json

@@ -1,0 +1,131 @@
+# ============================================================
+# config.yaml — Central configuration for the project
+# All paths relative to the project root.
+# ============================================================
+
+project:
+  name: "minsur-quality-prediction"
+  description: "Mining Process Quality Prediction — % Silica Concentrate"
+  author: "Analytics Candidate"
+  version: "1.0.0"
+
+# -----------------------------------------------------------
+# Paths
+# -----------------------------------------------------------
+paths:
+  data_raw: "data/raw"
+  data_interim: "data/interim"
+  data_processed: "data/processed"
+  models_baseline: "models/baseline"
+  models_selected: "models/selected"
+  reports_figures: "reports/figures"
+  reports_metrics: "reports/metrics"
+  mlruns: "mlruns"
+
+# -----------------------------------------------------------
+# Data
+# -----------------------------------------------------------
+data:
+  raw_filename: "MiningProcess_Flotation_Plant_Database.csv"
+  datetime_column: "date"
+  datetime_format: "%Y-%m-%d %H:%M:%S"
+  decimal_separator: ","           # original CSV uses comma as decimal
+
+# -----------------------------------------------------------
+# Target variable
+# -----------------------------------------------------------
+target: "% Silica Concentrate"
+
+# -----------------------------------------------------------
+# Feature groups (informational — used by feature_engineering.py)
+# -----------------------------------------------------------
+feature_groups:
+  feed:
+    - "% Iron Feed"
+    - "% Silica Feed"
+  flow:
+    - "Starch Flow"
+    - "Amina Flow"
+    - "Ore Pulp Flow"
+  pulp:
+    - "Ore Pulp pH"
+    - "Ore Pulp Density"
+  flotation_columns:
+    - "Flotation Column 01 Air Flow"
+    - "Flotation Column 02 Air Flow"
+    - "Flotation Column 03 Air Flow"
+    - "Flotation Column 04 Air Flow"
+    - "Flotation Column 05 Air Flow"
+    - "Flotation Column 06 Air Flow"
+    - "Flotation Column 07 Air Flow"
+    - "Flotation Column 01 Level"
+    - "Flotation Column 02 Level"
+    - "Flotation Column 03 Level"
+    - "Flotation Column 04 Level"
+    - "Flotation Column 05 Level"
+    - "Flotation Column 06 Level"
+    - "Flotation Column 07 Level"
+  lab_measurements:          # available only with delay — must NOT be used as predictors
+    - "% Iron Concentrate"
+    - "% Silica Concentrate"
+
+# -----------------------------------------------------------
+# Split proportions (temporal — no randomness)
+# -----------------------------------------------------------
+split:
+  train_ratio: 0.70
+  val_ratio: 0.15
+  # test_ratio = 1 - train_ratio - val_ratio = 0.15
+
+# -----------------------------------------------------------
+# Feature engineering
+# -----------------------------------------------------------
+feature_engineering:
+  lag_periods: [1, 3, 6, 12]       # lags in rows (20-min intervals ≈ 1h to 4h)
+  rolling_windows: [3, 6, 12]      # rolling window sizes in rows
+  temporal_features:
+    - "hour"
+    - "day"
+    - "month"
+    - "dayofweek"
+    - "is_weekend"
+
+# -----------------------------------------------------------
+# Model training
+# -----------------------------------------------------------
+models:
+  random_state: 42
+  ridge:
+    alpha: 1.0
+  random_forest:
+    n_estimators: 300
+    max_depth: 10
+    min_samples_leaf: 10
+    n_jobs: -1
+  xgboost:
+    n_estimators: 500
+    learning_rate: 0.05
+    max_depth: 6
+    subsample: 0.8
+    colsample_bytree: 0.8
+    n_jobs: -1
+    early_stopping_rounds: 50
+  lightgbm:
+    n_estimators: 500
+    learning_rate: 0.05
+    num_leaves: 63
+    n_jobs: -1
+
+# -----------------------------------------------------------
+# Explainability
+# -----------------------------------------------------------
+explainability:
+  shap_sample_size: 500       # rows sampled for SHAP (speed vs completeness)
+  top_features: 20
+
+# -----------------------------------------------------------
+# MLflow
+# -----------------------------------------------------------
+mlflow:
+  experiment_name: "minsur-silica-prediction"
+  tracking_uri: "mlruns"
