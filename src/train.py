@@ -233,11 +233,29 @@ def save_model(
     return model_path
 
 
-def load_model(folder: str = "selected", cfg: dict | None = None, filename: str = "model.pkl") -> Any:
-    """Load a persisted model."""
+def load_model(folder: str = "selected", cfg: dict | None = None, filename: str | Path = "model.pkl") -> Any:
+    """Load a persisted model.
+
+    Accepts either a file name relative to the configured model folder or an
+    absolute path to a concrete pickle artifact.
+    """
     cfg = cfg or CFG
-    folder_key = f"models_{folder}"
-    model_path = Path(cfg["paths"][folder_key]) / filename
+    filename_path = Path(filename)
+
+    if filename_path.is_absolute():
+        model_path = filename_path
+    else:
+        folder_key = f"models_{folder}"
+        model_path = Path(cfg["paths"][folder_key]) / filename_path
+
+    if model_path.is_dir():
+        raise IsADirectoryError(
+            f"Expected a model file but received a directory: {model_path}. "
+            "Provide a concrete .pkl file path or rerun the model-saving step."
+        )
+    if not model_path.exists():
+        raise FileNotFoundError(f"Model artifact not found: {model_path}")
+
     model = joblib.load(model_path)
     print(f"[train] Model loaded from: {model_path}")
     return model
