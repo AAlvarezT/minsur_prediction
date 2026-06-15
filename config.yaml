@@ -30,6 +30,8 @@ data:
   datetime_column: "date"
   datetime_format: "%Y-%m-%d %H:%M:%S"
   decimal_separator: ","           # original CSV uses comma as decimal
+  modeling_frequency: "1h"          # explicit modeling grain after temporal alignment
+  modeling_aggregation: "mean"      # aggregation within each modeling bucket
 
 # -----------------------------------------------------------
 # Target variable
@@ -68,6 +70,9 @@ feature_groups:
   lab_measurements:          # available only with delay — must NOT be used as predictors
     - "% Iron Concentrate"
     - "% Silica Concentrate"
+
+feature_availability:
+  feed_available_realtime: true      # sensitivity analysis in notebook 02 also tests false
 
 # -----------------------------------------------------------
 # Split proportions (temporal — no randomness)
