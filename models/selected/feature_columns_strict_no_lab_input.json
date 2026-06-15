@@ -255,9 +255,5 @@
   "Flotation Column 07 Level_roll_std_6",
   "Flotation Column 07 Level_roll_mean_12",
   "Flotation Column 07 Level_roll_std_12",
-  "Flotation Column 07 Level_diff_1",
-  "% Silica Concentrate_lag_1",
-  "% Silica Concentrate_lag_3",
-  "% Silica Concentrate_lag_6",
-  "% Silica Concentrate_lag_12"
+  "Flotation Column 07 Level_diff_1"
 ]

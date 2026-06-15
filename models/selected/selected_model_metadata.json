@@ -1,7 +1,7 @@
 {
-  "selection_protocol": "Validation RMSE only; test used only after final selections were fixed.",
-  "saved_model_role": "recommended_operational_model",
-  "saved_model_path": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\models\\selected\\model.pkl",
+  "selection_protocol": "Validation RMSE only; test used only after all final roles were fixed.",
+  "saved_model_role": "recommended_model_with_lagged_lab_assumption",
+  "saved_model_path": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\models\\selected\\model_lagged_lab_assumption.pkl",
   "feature_columns_path": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\models\\selected\\feature_columns.json",
   "best_statistical_model": {
     "scenario": "Feed ON + TargetLags ON",
@@ -11,11 +11,56 @@
       "RMSE": 0.6626,
       "R2": 0.5876
     },
+    "test_metrics": {
+      "MAE": 0.55,
+      "RMSE": 0.7474,
+      "R2": 0.6096
+    },
     "uses_feed_variables": true,
     "uses_target_lags": true,
-    "note": "Best statistical model uses target lags, so it should be treated as an optimistic benchmark unless delayed lab results are available with enough anticipation."
+    "note": "Best validation RMSE overall. This role is purely statistical and does not by itself decide whether lagged lab inputs are operationally acceptable."
   },
-  "recommended_operational_model": {
+  "recommended_model_with_lagged_lab_assumption": {
+    "scenario": "Feed ON + TargetLags ON",
+    "model_name": "Random Forest",
+    "validation_metrics": {
+      "MAE": 0.4856,
+      "RMSE": 0.6626,
+      "R2": 0.5876
+    },
+    "test_metrics": {
+      "MAE": 0.55,
+      "RMSE": 0.7474,
+      "R2": 0.6096
+    },
+    "uses_feed_variables": true,
+    "uses_target_lags": true,
+    "model_class": "RandomForestRegressor",
+    "model_params": {
+      "bootstrap": true,
+      "ccp_alpha": 0.0,
+      "criterion": "squared_error",
+      "max_depth": 10,
+      "max_features": 1.0,
+      "max_leaf_nodes": null,
+      "max_samples": null,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 10,
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 300,
+      "n_jobs": -1,
+      "oob_score": false,
+      "random_state": 42,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "model_path": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\models\\selected\\model_lagged_lab_assumption.pkl",
+    "feature_columns_path": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\models\\selected\\feature_columns.json",
+    "note": "Recommended primary model under the explicit assumption that the latest laboratory result is already available before inference. Only past target lags (`shift(1)` or greater) are used; no contemporaneous target is used as predictor."
+  },
+  "strict_no_lab_input_fallback": {
     "scenario": "Feed ON + TargetLags OFF",
     "model_name": "Random Forest",
     "validation_metrics": {
@@ -51,7 +96,9 @@
       "verbose": 0,
       "warm_start": false
     },
-    "note": "Recommended operational model avoids target lags and assumes feed variables are available at inference time."
+    "model_path": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\models\\selected\\model_strict_no_lab_input.pkl",
+    "feature_columns_path": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\models\\selected\\feature_columns_strict_no_lab_input.json",
+    "note": "Conservative fallback without lagged laboratory quality inputs. If this option shows weak test performance, it indicates that sensor/process variables alone are not capturing enough target variability."
   },
   "artifacts": {
     "validation_sensitivity_table": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\reports\\metrics\\validation_sensitivity_table.csv",
@@ -69,27 +116,8 @@
   },
   "reproducibility": {
     "include_feed_features": true,
-    "include_target_lags": false,
-    "operational_selection_rule": "Recommended operational model selected only among validation candidates with TargetLags OFF."
-  },
-  "mlflow_tracking": [
-    {
-      "selection_role": "best_statistical_model",
-      "scenario": "Feed ON + TargetLags ON",
-      "model_name": "Random Forest",
-      "status": "mlflow_logged",
-      "experiment_name": "MINSUR Silica Prediction - Temporal Modeling",
-      "run_name": "MINSUR Silica Prediction - Temporal Modeling | best_statistical_model | Feed ON + TargetLags ON | Random Forest",
-      "run_id": "724f4913affa469a9a921fab8ea0540e"
-    },
-    {
-      "selection_role": "recommended_operational_model",
-      "scenario": "Feed ON + TargetLags OFF",
-      "model_name": "Random Forest",
-      "status": "mlflow_logged",
-      "experiment_name": "MINSUR Silica Prediction - Temporal Modeling",
-      "run_name": "MINSUR Silica Prediction - Temporal Modeling | recommended_operational_model | Feed ON + TargetLags OFF | Random Forest",
-      "run_id": "4e7e630e318c4aeab1913fdb2d6ea7cf"
-    }
-  ]
+    "include_target_lags": true,
+    "lagged_lab_selection_rule": "Recommendation assumes the latest laboratory result is already available at inference time and therefore past target lags are operationally admissible.",
+    "strict_no_lab_selection_rule": "Strict fallback selected among candidates that do not use lagged laboratory quality inputs."
+  }
 }

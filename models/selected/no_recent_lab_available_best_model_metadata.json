@@ -1,0 +1,11 @@
+{
+  "scenario": "no_recent_lab_available",
+  "allowed_lags": [],
+  "availability_assumption": "No recent lab values are available; the model is strictly sensor-only.",
+  "best_model_name": "Random Forest",
+  "validation_metrics": {
+    "MAE": 0.7709,
+    "RMSE": 1.0006,
+    "R2": 0.0595
+  }
+}
