@@ -277,7 +277,28 @@ def run_preprocessing_pipeline(cfg: dict | None = None) -> pd.DataFrame:
         if df[col].dtype == object:
             df[col] = pd.to_numeric(df[col].str.replace(",", "."), errors="coerce")
 
-    df.to_parquet(interim_path)
-    print(f"[data_preprocessing] Cleaned data saved to: {interim_path}")
+    saved = False
+    save_errors: list[str] = []
+
+    # Prefer parquet for downstream speed/compatibility, but be robust to
+    # kernel-specific engine conflicts (e.g. pyarrow extension type errors).
+    for engine in ("pyarrow", "fastparquet"):
+        try:
+            df.to_parquet(interim_path, engine=engine)
+            print(f"[data_preprocessing] Cleaned data saved to: {interim_path} (engine={engine})")
+            saved = True
+            break
+        except Exception as exc:
+            save_errors.append(f"{engine}: {exc}")
+
+    # Final fallback: persist CSV so pipeline does not fail hard.
+    if not saved:
+        csv_fallback = interim_path.with_suffix(".csv")
+        df.to_csv(csv_fallback)
+        print("[data_preprocessing] Parquet save failed for all engines.")
+        for err in save_errors:
+            print(f"  - {err}")
+        print(f"[data_preprocessing] Saved CSV fallback to: {csv_fallback}")
+
     print(f"[data_preprocessing] Shape: {df.shape}")
     return df
