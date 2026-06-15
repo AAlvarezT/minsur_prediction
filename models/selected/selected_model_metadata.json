@@ -5,16 +5,16 @@
   "feature_columns_path": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\models\\selected\\feature_columns.json",
   "best_statistical_model": {
     "scenario": "Feed ON + TargetLags ON",
-    "model_name": "Random Forest",
+    "model_name": "Extra Trees Regressor",
     "validation_metrics": {
-      "MAE": 0.4856,
-      "RMSE": 0.6626,
-      "R2": 0.5876
+      "MAE": 0.4814,
+      "RMSE": 0.6629,
+      "R2": 0.5899
     },
     "test_metrics": {
-      "MAE": 0.55,
-      "RMSE": 0.7474,
-      "R2": 0.6096
+      "MAE": 0.5573,
+      "RMSE": 0.7496,
+      "R2": 0.6083
     },
     "uses_feed_variables": true,
     "uses_target_lags": true,
@@ -22,30 +22,30 @@
   },
   "recommended_model_with_lagged_lab_assumption": {
     "scenario": "Feed ON + TargetLags ON",
-    "model_name": "Random Forest",
+    "model_name": "Extra Trees Regressor",
     "validation_metrics": {
-      "MAE": 0.4856,
-      "RMSE": 0.6626,
-      "R2": 0.5876
+      "MAE": 0.4814,
+      "RMSE": 0.6629,
+      "R2": 0.5899
     },
     "test_metrics": {
-      "MAE": 0.55,
-      "RMSE": 0.7474,
-      "R2": 0.6096
+      "MAE": 0.5573,
+      "RMSE": 0.7496,
+      "R2": 0.6083
     },
     "uses_feed_variables": true,
     "uses_target_lags": true,
-    "model_class": "RandomForestRegressor",
+    "model_class": "ExtraTreesRegressor",
     "model_params": {
-      "bootstrap": true,
+      "bootstrap": false,
       "ccp_alpha": 0.0,
       "criterion": "squared_error",
-      "max_depth": 10,
+      "max_depth": null,
       "max_features": 1.0,
       "max_leaf_nodes": null,
       "max_samples": null,
       "min_impurity_decrease": 0.0,
-      "min_samples_leaf": 10,
+      "min_samples_leaf": 5,
       "min_samples_split": 2,
       "min_weight_fraction_leaf": 0.0,
       "monotonic_cst": null,
@@ -64,14 +64,14 @@
     "scenario": "Feed ON + TargetLags OFF",
     "model_name": "Random Forest",
     "validation_metrics": {
-      "MAE": 0.7709,
-      "RMSE": 1.0006,
-      "R2": 0.0595
+      "MAE": 0.8188,
+      "RMSE": 1.0291,
+      "R2": 0.0115
     },
     "test_metrics": {
-      "MAE": 0.9306,
-      "RMSE": 1.1671,
-      "R2": 0.048
+      "MAE": 0.9463,
+      "RMSE": 1.1868,
+      "R2": 0.0182
     },
     "uses_feed_variables": true,
     "uses_target_lags": false,
