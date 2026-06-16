@@ -119,5 +119,34 @@
     "include_target_lags": true,
     "lagged_lab_selection_rule": "Recommendation assumes the latest laboratory result is already available at inference time and therefore past target lags are operationally admissible.",
     "strict_no_lab_selection_rule": "Strict fallback selected among candidates that do not use lagged laboratory quality inputs."
-  }
+  },
+  "mlflow_tracking": [
+    {
+      "selection_role": "best_statistical_model",
+      "scenario": "Feed ON + TargetLags ON",
+      "model_name": "Extra Trees Regressor",
+      "status": "mlflow_logged",
+      "experiment_name": "MINSUR Silica Prediction - Temporal Modeling",
+      "run_name": "MINSUR Silica Prediction - Temporal Modeling | best_statistical_model | Feed ON + TargetLags ON | Extra Trees Regressor",
+      "run_id": "b8571f19d4d74daeac7346c25bbb34d2"
+    },
+    {
+      "selection_role": "recommended_model_with_lagged_lab_assumption",
+      "scenario": "Feed ON + TargetLags ON",
+      "model_name": "Extra Trees Regressor",
+      "status": "mlflow_logged",
+      "experiment_name": "MINSUR Silica Prediction - Temporal Modeling",
+      "run_name": "MINSUR Silica Prediction - Temporal Modeling | recommended_model_with_lagged_lab_assumption | Feed ON + TargetLags ON | Extra Trees Regressor",
+      "run_id": "f3e8a844220d463584dd0ac2dfb8f2bd"
+    },
+    {
+      "selection_role": "strict_no_lab_input_fallback",
+      "scenario": "Feed ON + TargetLags OFF",
+      "model_name": "Random Forest",
+      "status": "mlflow_logged",
+      "experiment_name": "MINSUR Silica Prediction - Temporal Modeling",
+      "run_name": "MINSUR Silica Prediction - Temporal Modeling | strict_no_lab_input_fallback | Feed ON + TargetLags OFF | Random Forest",
+      "run_id": "b5be3fa5b4e244cd9fc7f6db23c6653f"
+    }
+  ]
 }
