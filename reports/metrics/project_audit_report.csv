@@ -1,0 +1,58 @@
+category,artifact,expected_path,exists,status,notes
+notebook,01_data_understanding,notebooks/01_data_understanding.ipynb,yes,complete,estructura base OK
+notebook,02_feature_engineering_modeling,notebooks/02_feature_engineering_modeling.ipynb,yes,complete,estructura base OK
+notebook,02b_high_frequency_sensor_aggregation,notebooks/02b_high_frequency_sensor_aggregation.ipynb,yes,complete,estructura base OK
+notebook,03_explainability,notebooks/03_explainability.ipynb,yes,complete,estructura base OK
+notebook,04_simulation_what_if,notebooks/04_simulation_what_if.ipynb,yes,complete,estructura base OK
+notebook,06_mlops_experiment_management,notebooks/06_mlops_experiment_management.ipynb,yes,complete,estructura base OK
+model,selected_model_metadata,models/selected/selected_model_metadata.json,yes,complete,
+model,feature_columns,models/selected/feature_columns.json,yes,complete,
+model,feature_columns_strict_no_lab_input,models/selected/feature_columns_strict_no_lab_input.json,yes,complete,
+model,model_lagged_lab_assumption,models/selected/model_lagged_lab_assumption.pkl,yes,complete,
+model,model_strict_no_lab_input,models/selected/model_strict_no_lab_input.pkl,yes,complete,
+model,lag_1_available_best_model,models/selected/lag_1_available_best_model.pkl,yes,complete,
+model,lag_3_available_best_model,models/selected/lag_3_available_best_model.pkl,yes,complete,
+model,lag_6_available_best_model,models/selected/lag_6_available_best_model.pkl,yes,complete,
+model,no_recent_lab_available_best_model,models/selected/no_recent_lab_available_best_model.pkl,yes,complete,
+metric,model_comparison,reports/metrics/model_comparison.csv,yes,complete,
+metric,high_frequency_aggregation_comparison,reports/metrics/high_frequency_aggregation_comparison.csv,yes,complete,
+metric,scenario_results,reports/metrics/scenario_results.csv,yes,complete,
+metric,scenario_ranking,reports/metrics/scenario_ranking.csv,yes,complete,
+metric,mlflow_runs_audit,reports/metrics/mlflow_runs_audit.csv,yes,complete,
+metric,model_version_audit,reports/metrics/model_version_audit.csv,yes,complete,
+metric,reproducibility_artifact_checklist,reports/metrics/reproducibility_artifact_checklist.csv,yes,complete,
+metric,mlops_summary,reports/metrics/mlops_summary.md,yes,complete,
+figure,raw_to_hourly_reduction,reports/figures/raw_to_hourly_reduction.png,yes,complete,
+figure,target_distribution,reports/figures/target_distribution.png,yes,complete,
+figure,target_temporal,reports/figures/target_temporal.png,yes,complete,
+figure,correlation_matrix,reports/figures/correlation_matrix.png,yes,complete,
+figure,real_vs_predicted_test,reports/figures/real_vs_predicted_test.png,yes,complete,
+figure,temporal_residuals,reports/figures/temporal_residuals.png,yes,complete,
+figure,residuals_distribution,reports/figures/residuals_distribution.png,yes,complete,
+figure,mae_by_month,reports/figures/mae_by_month.png,yes,complete,
+figure,high_frequency_aggregation_r2_comparison,reports/figures/high_frequency_aggregation_r2_comparison.png,yes,complete,
+figure,high_frequency_aggregation_mae_comparison,reports/figures/high_frequency_aggregation_mae_comparison.png,yes,complete,
+figure,sensor_only_aggregated_feature_importance,reports/figures/sensor_only_aggregated_feature_importance.png,yes,complete,
+figure,shap_bar,reports/figures/shap_bar.png,yes,complete,
+figure,shap_summary,reports/figures/shap_summary.png,yes,complete,
+figure,shap_waterfall_representative,reports/figures/shap_waterfall_0_representative_case.png,yes,complete,
+figure,shap_waterfall_high_error,reports/figures/shap_waterfall_0_high_error_case.png,yes,complete,
+figure,shap_waterfall_low_error,reports/figures/shap_waterfall_0_low_error_case.png,yes,complete,
+figure,pdp_silica_lag_1,reports/figures/pdp_silica_concentrate_lag_1.png,yes,complete,
+figure,pdp_ore_pulp_ph,reports/figures/pdp_ore_pulp_ph.png,yes,complete,
+figure,scenario_impact_heatmap,reports/figures/scenario_impact_heatmap.png,yes,complete,
+figure,scenario_delta_bar_by_case,reports/figures/scenario_delta_bar_by_case.png,yes,complete,
+figure,tornado_sensitivity_median_case,reports/figures/tornado_sensitivity_median_case.png,yes,complete,
+figure,lab_delay_availability_r2,reports/figures/lab_delay_availability_r2.png,yes,complete,
+figure,mlflow_ui_runs,reports/figures/mlflow_ui_runs.png,yes,complete,
+presentation,beamer_tex,minsur_quality_prediction_beamer_v2.tex,yes,complete,
+presentation,beamer_pdf,minsur_quality_prediction_beamer_v2.pdf,no,missing_optional,
+api,api_file,src/api.py,yes,complete,
+api,inference_file,src/inference.py,yes,complete,
+api,simulation_file,src/simulation.py,yes,complete,
+demo,streamlit_app,app.py,yes,complete,
+api_endpoint,/health,src/api.py,yes,complete,endpoint detectado
+api_endpoint,/model-info,src/api.py,yes,complete,endpoint detectado
+api_endpoint,/features,src/api.py,yes,complete,endpoint detectado
+api_endpoint,/predict,src/api.py,yes,complete,endpoint detectado
+api_endpoint,/simulate,src/api.py,yes,complete,endpoint detectado

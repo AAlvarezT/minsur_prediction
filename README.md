@@ -1,308 +1,188 @@
-# Mining Process Quality Prediction
+﻿# Repositorio auditable del soft sensor de flotacion de Minsur
 
-**Minsur Analytics Technical Challenge**  
-*Senior Analytics / Data Science Role*
+Proyecto de prueba tecnica para predecir `% Silica Concentrate` en planta de flotacion usando un enfoque basado en datos, temporal y auditable.
 
----
+## Objetivo del caso
+Construir un sistema de alerta temprana (soft sensor) para `% Silica Concentrate` que sea:
+- tecnicamente defendible,
+- trazable en sus supuestos,
+- reproducible por evaluadores externos,
+- y separable en componentes (modelado, explicabilidad, escenarios y MLOps).
 
-## Business Objective
+## Resultado principal (sin cambios)
+Modelo recomendado original: Random Forest bajo supuesto de laboratorio rezagado disponible.
 
-In the Minsur flotation plant, the quality of the final iron ore concentrate is determined by its **% Silica Concentrate** — a lower value indicates purer iron concentrate and greater commercial value. Laboratory quality measurements are available only with a significant delay (up to several hours after the corresponding sensor readings), which prevents real-time operational responses to quality deviations.
+- Test MAE: ~0.5500
+- Test RMSE: ~0.7474
+- Test R2: ~0.6096
 
-**Goal:** Build a machine learning model that predicts `% Silica Concentrate` in real time using continuous process sensor data (feed quality, reagent flows, flotation column parameters), enabling operators to detect and respond to quality excursions before laboratory results become available.
+Comparativos clave:
+- RF con sensores agregados + laboratorio rezagado: MAE ~0.5409, RMSE ~0.7399, R2 ~0.6190
+- Baseline de persistencia: RMSE ~0.7614, R2 ~0.5965
+- Modelo solo sensores agregado: MAE ~0.8921, RMSE ~1.1197, R2 ~0.1260
 
----
+Sensibilidad por retraso de laboratorio (validacion):
+- lag_1_available: R2 ~0.5876
+- lag_3_available: R2 ~0.2626
+- lag_6_available: R2 ~0.0486
+- no_recent_lab_available: R2 ~0.0595
 
-## Dataset
+## Narrativa tecnica valida
+Este sistema debe presentarse como soft sensor / alerta temprana para `% Silica Concentrate`.
 
-**Source:** [Quality Prediction in a Mining Process — Kaggle](https://www.kaggle.com/datasets/edumagalhaes/quality-prediction-in-a-mining-process)
+No debe presentarse como:
+- control automatico,
+- recomendacion causal,
+- ni despliegue productivo final.
 
-- ~737,000 observations
-- Sampling interval: ~20 minutes (sensor data), ~1 hour (lab measurements)
-- Time range: March 2017 – September 2017
-- 24 columns: date, feed characteristics, reagent flows, flotation column parameters, lab measurements
-
----
-
-## Target Variable
-
-| Variable | Description |
-|---|---|
-| `% Silica Concentrate` | Percentage of silica in the final iron ore concentrate. Lower = better quality. |
-
----
-
-## Approach
-
-### Temporal Integrity (Critical Design Decision)
-
-This is a **time-series prediction problem**. All data splits are strictly temporal — no random shuffling is ever applied. Reasons:
-
-1. A random split would allow training on future observations to predict past ones — a form of data leakage that produces over-optimistic evaluation metrics.
-2. The deployed model operates in production by predicting the present/future, never the past.
-3. Temporal ordering also ensures that lag and rolling features only use information available at inference time.
-
-### Leakage Prevention
-
-- `% Iron Concentrate` and `% Silica Concentrate` are lab measurements with delay → **excluded from features**.
-- Only **lagged versions** of these variables (shift ≥ 1) are permitted.
-- Rolling statistics are computed on `shift(1)` of each series to exclude the current row.
-- Scalers are fitted exclusively on the training split.
-
----
-
-## Feature Engineering
-
-| Feature type | Description |
-|---|---|
-| **Raw operational features** | % Iron Feed, % Silica Feed, Starch Flow, Amina Flow, Ore Pulp Flow, pH, Density, 14 flotation column variables |
-| **Temporal features** | hour, day, month, dayofweek, is_weekend |
-| **Lag features** | 1, 3, 6, 12 rows back (~20 min to ~4 h) |
-| **Rolling mean** | windows 3, 6, 12 rows |
-| **Rolling std** | windows 3, 6, 12 rows |
-| **Diff features** | period-over-period differences |
-
----
-
-## Models Evaluated
-
-| Model | Description |
-|---|---|
-| **Baseline (Mean)** | Predict training mean for all observations |
-| **Ridge** | Regularised linear regression (α=1.0) |
-| **Random Forest** | Ensemble of 300 trees, max_depth=10 |
-| **XGBoost** | Gradient boosting with early stopping |
-| **LightGBM** | Fast gradient boosting |
-
-All models are evaluated on the **validation set** (temporal). Final evaluation is performed once on the **test set** after model selection is complete.
-
----
-
-## Metrics
-
-| Metric | Formula | Reason |
-|---|---|---|
-| **MAE** | mean \|y − ŷ\| | Directly interpretable in % silica units |
-| **RMSE** | √mean(y − ŷ)² | Penalises large quality excursions more heavily |
-| **R²** | 1 − SS_res/SS_tot | Proportion of variance explained |
-
----
-
-## Model Selection
-
-The final model is selected based on **lowest RMSE on the validation set**.  
-Justification: In a flotation process, large prediction errors are disproportionately costly (they may lead to off-spec product or unnecessary reagent waste), so penalising large errors more heavily via RMSE is operationally appropriate.
-
-The selected model is saved to `models/selected/model.pkl`.
-
----
-
-## Explainability (Level 3)
-
-SHAP (SHapley Additive exPlanations) is used to explain the selected model's behaviour:
-
-- **Global**: Summary beeswarm and bar plots showing top 20 features by mean |SHAP|.
-- **Dependence plots**: How individual operational variables relate to predicted silica.
-- **Local (waterfall)**: Per-observation explanation for high/low silica predictions.
-
-### Key operational drivers (model-learned associations, not causal claims)
-
-| Variable | Effect direction | Operational interpretation |
-|---|---|---|
-| `% Silica Feed` | ↑ → higher silica | Feed quality directly propagates to concentrate |
-| `% Iron Feed` | ↑ → lower silica | Richer ore → cleaner separation |
-| `Amina Flow` | ↑ → lower silica | More collector → better silica suppression |
-| `Starch Flow` | context-dependent | Depressant: excess can reduce selectivity |
-| `Ore Pulp pH` | optimal range → lower | pH controls reagent efficiency |
-| Flotation column air flow | excess → higher silica | Mechanical silica entrainment |
-
-> **Disclaimer:** SHAP values describe the model's behaviour, not the underlying process physics. Operational decisions require domain expertise validation.
-
----
-
-## Prediction Simulations (Level 4)
-
-Notebook 04 demonstrates what-if scenario analysis using a reference observation from the test set. Scenarios include:
-
-| Scenario | Modification |
-|---|---|
-| A | Amina Flow +5% |
-| B | Amina Flow −5% |
-| C | Starch Flow −5% |
-| D | Starch Flow +5% |
-| E | Ore Pulp pH +0.5 |
-| F | Ore Pulp pH −0.5 |
-| G | % Silica Feed −10% |
-| H | Combined: Amina +5% + Starch −5% |
-
-Sensitivity sweeps visualise the model's response to continuous variation in Amina Flow and pH.
-
-> **Disclaimer:** These are predictive simulations, not engineering recommendations. Results are valid only within the historical data distribution.
-
----
-
-## Limitations
-
-1. **Temporal scope**: Model trained on ~7 months of data. Seasonal or longer-term process changes may require retraining.
-2. **No mechanistic modelling**: The model learns statistical associations, not physical laws. It cannot extrapolate reliably outside the training distribution.
-3. **Point predictions only**: No uncertainty quantification. A production system should provide prediction intervals.
-4. **Lag consistency in inference**: At deployment, lag features must be populated from real historical process data — a proper feature store is needed.
-5. **Recovery trade-off**: The model predicts silica but does not model iron recovery. Optimising silica alone may worsen overall metallurgical performance.
-6. **Lab measurement delay handling**: This model does not explicitly model the delay in lab readings — it simply excludes them. A more sophisticated approach could model the delay distribution explicitly.
-
----
-
-## Project Structure
-
-```
-minsur-quality-prediction/
-├── README.md
-├── requirements.txt
-├── .gitignore
-├── config.yaml
-├── data/
-│   ├── raw/                    ← Place Kaggle CSV here
-│   ├── interim/                ← Cleaned data (data_cleaned.parquet)
-│   └── processed/              ← Train/val/test splits (parquet)
-├── notebooks/
-│   ├── 01_data_understanding.ipynb
-│   ├── 02_feature_engineering_modeling.ipynb
-│   ├── 03_explainability.ipynb
-│   └── 04_simulation_what_if.ipynb
-├── src/
-│   ├── config.py               ← YAML loader + path resolver
-│   ├── data_preprocessing.py   ← Load, clean, validate raw data
-│   ├── feature_engineering.py  ← Lags, rolling stats, temporal split
-│   ├── train.py                ← Model factory, training, persistence
-│   ├── evaluate.py             ← Metrics, residual analysis
-│   ├── explain.py              ← SHAP utilities
-│   └── predict.py              ← Inference + what-if scenarios
-├── models/
-│   ├── baseline/
-│   └── selected/               ← model.pkl + feature_columns.json
-├── reports/
-│   ├── figures/                ← All generated plots
-│   └── metrics/                ← model_comparison.csv, scenario_comparison.csv
-└── mlruns/                     ← MLflow experiment tracking
+## Estructura del proyecto
+```text
+minsur_prediction/
+  data/
+    README.md
+    raw/
+    interim/
+    processed/
+  notebooks/
+    01_data_understanding.ipynb
+    02_feature_engineering_modeling.ipynb
+    02b_high_frequency_sensor_aggregation.ipynb
+    03_explainability.ipynb
+    04_simulation_what_if.ipynb
+    06_mlops_experiment_management.ipynb
+  src/
+    __init__.py
+    config.py
+    data_preprocessing.py
+    feature_engineering.py
+    inference.py
+    simulation.py
+    api.py
+    app_utils.py
+    evaluate.py
+    explain.py
+    predict.py
+    train.py
+  models/
+    selected/
+  reports/
+    metrics/
+    figures/
+    figures_presentation/
+  scripts/
+    collect_presentation_figures.py
+    audit_project_outputs.py
+  app.py
+  minsur_quality_prediction_beamer_v2.tex
+  requirements.txt
+  .gitignore
 ```
 
----
+## Orden de reproduccion recomendado
+1. `notebooks/01_data_understanding.ipynb`
+2. `notebooks/02_feature_engineering_modeling.ipynb`
+3. `notebooks/02b_high_frequency_sensor_aggregation.ipynb`
+4. `notebooks/03_explainability.ipynb`
+5. `notebooks/04_simulation_what_if.ipynb`
+6. `notebooks/06_mlops_experiment_management.ipynb`
 
-## Quickstart
+## Salidas esperadas por notebook
+### 01_data_understanding
+- `reports/figures/raw_to_hourly_reduction.png`
+- `reports/figures/target_distribution.png`
+- `reports/figures/target_temporal.png`
+- `reports/figures/correlation_matrix.png`
 
+### 02_feature_engineering_modeling
+- `models/selected/selected_model_metadata.json`
+- `models/selected/feature_columns.json`
+- `models/selected/feature_columns_strict_no_lab_input.json`
+- `models/selected/*.pkl`
+- `reports/figures/real_vs_predicted_test.png`
+- `reports/figures/temporal_residuals.png`
+- `reports/figures/residuals_distribution.png`
+- `reports/figures/mae_by_month.png`
+
+### 02b_high_frequency_sensor_aggregation
+- `reports/metrics/high_frequency_aggregation_comparison.csv`
+- `reports/figures/high_frequency_aggregation_r2_comparison.png`
+- `reports/figures/high_frequency_aggregation_mae_comparison.png`
+- `reports/figures/sensor_only_aggregated_feature_importance.png`
+
+### 03_explainability
+- `reports/figures/shap_bar.png`
+- `reports/figures/shap_summary.png`
+- `reports/figures/shap_waterfall_0_representative_case.png`
+- `reports/figures/shap_waterfall_0_high_error_case.png`
+- `reports/figures/shap_waterfall_0_low_error_case.png`
+- `reports/figures/pdp_silica_concentrate_lag_1.png`
+- `reports/figures/pdp_ore_pulp_ph.png`
+
+### 04_simulation_what_if
+- `reports/metrics/scenario_results.csv`
+- `reports/metrics/scenario_ranking.csv`
+- `reports/figures/scenario_impact_heatmap.png`
+- `reports/figures/scenario_delta_bar_by_case.png`
+- `reports/figures/tornado_sensitivity_median_case.png`
+
+### 06_mlops_experiment_management
+- `reports/metrics/mlflow_runs_audit.csv`
+- `reports/metrics/model_version_audit.csv`
+- `reports/metrics/reproducibility_artifact_checklist.csv`
+- `reports/metrics/mlops_summary.md`
+- `reports/figures/mlflow_ui_runs.png` (si existe captura)
+
+## Auditoria del proyecto
+Ejecutar:
 ```bash
-# 1. Install dependencies
+python scripts/audit_project_outputs.py
+```
+
+Genera:
+- `reports/metrics/project_audit_report.csv`
+- `reports/metrics/project_audit_summary.md`
+
+## Supuestos operativos
+- El modelo recomendado usa laboratorio rezagado.
+- `lag_1` equivale aproximadamente a una hora en la tabla horaria.
+- Es valido solo si el laboratorio rezagado esta disponible antes de inferencia.
+- Sin laboratorio reciente se debe usar fallback (menor desempeno).
+- Los escenarios what-if se interpretan como sensibilidad predictiva, no causalidad.
+- No es control automatico.
+
+## Nivel 7 (API) - opcional
+Si se evalua API:
+```bash
+python -m uvicorn src.api:app --reload --host 127.0.0.1 --port 8000
+```
+
+Rutas de API esperadas:
+- `/health`
+- `/model-info`
+- `/features`
+- `/predict`
+- `/simulate`
+
+## Demo de Streamlit (opcional)
+```bash
+streamlit run app.py
+```
+
+La app consume `src/inference.py` y `src/simulation.py` y no debe duplicar logica de entrenamiento.
+
+## MLflow local
+```bash
+mlflow ui --backend-store-uri mlruns --host 127.0.0.1 --port 5001
+```
+
+## Requisitos
+Instalacion minima:
+```bash
 pip install -r requirements.txt
-
-# 2. Place the Kaggle dataset in data/raw/
-# (or let notebook 01 download it via kagglehub)
-
-# 3. Run notebooks in order
-# Open notebooks/ in VS Code and run cells top-to-bottom:
-#   01_data_understanding.ipynb
-#   02_feature_engineering_modeling.ipynb
-#   03_explainability.ipynb
-#   04_simulation_what_if.ipynb
 ```
 
----
-
-## MLflow Tracking
-
-Model runs are logged to `mlruns/`. To view the MLflow UI:
-
-```bash
-cd minsur-quality-prediction
-mlflow ui --backend-store-uri mlruns
-# Open http://localhost:5000
-```
-
-Note: in `mlruns/`, folder names are internal MLflow IDs by design. Use the MLflow UI to see descriptive experiment names and run names.
-
----
-
-## Requirements
-
-See `requirements.txt`. Key dependencies:
-
-- `pandas`, `numpy`, `scikit-learn` — core ML
-- `xgboost`, `lightgbm` — gradient boosting
-- `shap` — explainability
-- `mlflow` — experiment tracking
-- `matplotlib`, `seaborn` — visualisation
-- `joblib` — model persistence
-- `kagglehub` — dataset download
-
----
-
-## Streamlit Data-Driven Quality System
-
-This repository includes an executive prototype app to present prediction, explainability,
-what-if sensitivity, laboratory delay risk, and MLOps traceability for `% Silica Concentrate`.
-
-Run locally from the project root:
-
-```bash
-streamlit run app.py
-```
-
-The app is resilient to missing artifacts: if a CSV/JSON/model/image is unavailable,
-it shows a warning and continues with available evidence.
-
----
-
-## Level 7 - API Exposure
-
-Run API:
-
-```bash
-python -m uvicorn src.api:app --reload --host 127.0.0.1 --port 8000
-```
-
-Open API docs:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-Run Streamlit demo:
-
-```bash
-streamlit run app.py
-```
-
-Run tests:
-
-```bash
-python -m pytest tests
-```
-
-## Operational assumptions
-
-- The recommended model depends on lagged-lab availability.
-- `lag_1` is approximately 1 hour in the hourly modeling table.
-- If no recent lab is available, use the fallback with lower predictive performance.
-- What-if analysis is predictive sensitivity, not causality.
-- The system is decision support, not automatic plant control.
-
----
-
-## Level 7 - API Exposure
-
-Run API:
-
-```bash
-python -m uvicorn src.api:app --reload --host 127.0.0.1 --port 8000
-```
-
-Open docs:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-Run Streamlit demo:
-
-```bash
-streamlit run app.py
-```
+## Limitaciones y afirmaciones que NO se deben hacer
+- No afirmar causalidad fisica del proceso con SHAP/PDP.
+- No afirmar despliegue productivo final.
+- No afirmar recomendacion operativa automatica.
+- No afirmar robustez fuera del rango historico de entrenamiento.

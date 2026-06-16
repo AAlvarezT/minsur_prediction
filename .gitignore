@@ -20,22 +20,28 @@ ENV/
 *.ipynb_checkpoints
 
 # Data files — raw data is NOT versioned
-data/raw/*.csv
-data/raw/*.xlsx
-data/raw/*.parquet
-data/interim/*.csv
-data/interim/*.parquet
-data/processed/*.csv
-data/processed/*.parquet
+data/raw/*
+data/interim/*
+data/processed/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+!data/README.md
+!data/.gitkeep
 
 # Models — large binaries not versioned (only keep selected)
 models/baseline/*.pkl
 models/selected/*.pkl
+!models/selected/*.json
 
 # Reports — generated figures not versioned
 reports/figures/*.png
 reports/figures/*.pdf
 reports/metrics/*.csv
+!reports/figures/*.png
+!reports/figures_presentation/*.png
+!reports/metrics/*.csv
+!reports/metrics/*.md
 
 # MLflow artifacts
 mlruns/
