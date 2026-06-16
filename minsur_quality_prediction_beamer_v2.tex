@@ -1,0 +1,653 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+
+% ============================================================
+% Minsur Analytics Case - Executive Beamer Deck v2
+% Author: Arturo Alvarez de la Torre
+% Compile: pdflatex
+% ============================================================
+
+\usetheme{default}
+\setbeamertemplate{navigation symbols}{}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.misc,fit}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{appendixnumberbeamer}
+
+\graphicspath{{reports/figures_presentation/}{reports/figures/}{figures/}{./}}
+
+% ---------- palette ----------
+\definecolor{MinsurNavy}{RGB}{12,31,52}
+\definecolor{MinsurBlue}{RGB}{25,85,145}
+\definecolor{MinsurSky}{RGB}{0,153,188}
+\definecolor{MinsurGold}{RGB}{226,159,38}
+\definecolor{MinsurGreen}{RGB}{38,132,92}
+\definecolor{MinsurOrange}{RGB}{208,105,44}
+\definecolor{MinsurRed}{RGB}{172,62,62}
+\definecolor{MinsurGray}{RGB}{86,95,108}
+\definecolor{MinsurLight}{RGB}{244,247,250}
+\definecolor{MinsurLine}{RGB}{217,224,232}
+\definecolor{MinsurDarkLine}{RGB}{175,185,198}
+
+\setbeamercolor{normal text}{fg=MinsurNavy,bg=white}
+\setbeamercolor{frametitle}{fg=MinsurNavy,bg=white}
+\setbeamercolor{structure}{fg=MinsurBlue}
+\setbeamerfont{frametitle}{size=\Large,series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\small,series=\mdseries}
+\setbeamertemplate{itemize item}{\textcolor{MinsurGold}{$\blacktriangleright$}}
+\setbeamertemplate{itemize subitem}{\textcolor{MinsurSky}{$\bullet$}}
+\setbeamersize{text margin left=0.55cm,text margin right=0.55cm}
+
+% ---------- footer ----------
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.72\paperwidth,ht=2.7ex,dp=1.1ex,leftskip=1em]{author in head/foot}%
+    \footnotesize\color{white} Arturo Alvarez de la Torre \hspace{0.7em} | \hspace{0.7em} Minsur Analytics Technical Case
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.28\paperwidth,ht=2.7ex,dp=1.1ex,rightskip=1em plus 1fil]{date in head/foot}%
+    \hfill \footnotesize\color{white}\insertframenumber/\inserttotalframenumber
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\setbeamercolor{author in head/foot}{fg=white,bg=MinsurNavy}
+\setbeamercolor{date in head/foot}{fg=white,bg=MinsurBlue}
+
+% ---------- utilities ----------
+\newcommand{\slidetag}[1]{%
+  \tikz[baseline=(X.base)]\node[fill=MinsurBlue!10, draw=MinsurBlue!20, rounded corners=2pt, inner xsep=5pt, inner ysep=2pt] (X) {\scriptsize\bfseries\textcolor{MinsurBlue}{#1}};%
+}
+\newcommand{\status}[2]{%
+  \tikz[baseline=(X.base)]\node[fill=#2!12, draw=#2!25, rounded corners=2pt, inner xsep=4pt, inner ysep=1.5pt] (X) {\scriptsize\bfseries\textcolor{#2}{#1}};%
+}
+\newcommand{\keymessage}[1]{%
+  \vspace{-0.05cm}
+  \begin{beamercolorbox}[wd=\textwidth,sep=0.62em,rounded=true]{keybox}
+  \textbf{#1}
+  \end{beamercolorbox}\vspace{0.10cm}
+}
+\setbeamercolor{keybox}{fg=MinsurNavy,bg=MinsurLight}
+\newcommand{\decisionbox}[2]{%
+  \begin{beamercolorbox}[wd=\textwidth,sep=0.65em,rounded=true]{decision}
+  \textbf{\textcolor{MinsurBlue}{#1}}\hspace{0.25em} #2
+  \end{beamercolorbox}
+}
+\setbeamercolor{decision}{fg=MinsurNavy,bg=MinsurBlue!7}
+\setbeamercolor{warnbox}{fg=MinsurNavy,bg=MinsurOrange!10}
+\setbeamercolor{riskbox}{fg=MinsurNavy,bg=MinsurRed!9}
+\setbeamercolor{metricbox}{fg=MinsurNavy,bg=MinsurLight}
+\newcommand{\smallnote}[1]{{\scriptsize\color{MinsurGray}#1}}
+\newcommand{\metriccard}[3]{%
+\begin{minipage}[t]{0.31\textwidth}
+\centering
+\begin{beamercolorbox}[wd=\textwidth,sep=0.65em,rounded=true]{metricbox}
+{\scriptsize\color{MinsurGray}#1}\\[-0.02cm]
+{\Large\bfseries\textcolor{#3}{#2}}
+\end{beamercolorbox}
+\end{minipage}}
+\newcommand{\figfallback}[1]{%
+\begin{beamercolorbox}[wd=\textwidth,sep=0.8em,rounded=true]{metricbox}
+\centering\scriptsize\textbf{Artefacto visual no disponible.}\\[-0.02cm]
+\scriptsize #1
+\end{beamercolorbox}}
+\newcommand{\safeimage}[3][width=\textwidth]{\IfFileExists{#2}{\includegraphics[#1]{#2}}{\figfallback{#3}}}
+
+% ---------- title data ----------
+\title{Predicción temprana de calidad en flotación}
+\subtitle{De notebooks a un soft sensor auditable para \% Silica Concentrate}
+\author{Arturo Alvarez de la Torre}
+\institute{Caso Técnico Analytics | Minsur}
+\date{\today}
+
+\begin{document}
+
+% ============================================================
+\begin{frame}[plain]
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[MinsurNavy] (current page.south west) rectangle ([xshift=0.36\paperwidth]current page.north west);
+  \fill[MinsurBlue!8] ([xshift=0.36\paperwidth]current page.south west) rectangle (current page.north east);
+  \draw[MinsurGold,line width=2.4pt] ([xshift=0.36\paperwidth,yshift=0.9cm]current page.south west) -- ([xshift=0.36\paperwidth,yshift=-0.9cm]current page.north west);
+\end{tikzpicture}
+\vspace{0.55cm}
+\begin{columns}[T]
+\column{0.31\textwidth}
+\color{white}
+\vspace{0.5cm}
+{\Large\bfseries Minsur}\\[0.12cm]
+{\small Analytics Technical Case}\\[4.15cm]
+{\small Arturo Alvarez de la Torre}\\
+{\scriptsize \today}
+\column{0.63\textwidth}
+\vspace{0.45cm}
+{\Huge\bfseries\color{MinsurNavy}Predicción temprana de calidad en flotación}\\[0.25cm]
+{\Large\color{MinsurBlue}De notebooks a un soft sensor auditable para \% Silica Concentrate}\\[0.55cm]
+\begin{beamercolorbox}[wd=0.93\linewidth,sep=0.95em,rounded=true]{keybox}
+\textbf{Tesis ejecutiva:} el sistema es defendible como alerta temprana bajo un supuesto operativo explícito: disponibilidad de laboratorio rezagado. Sin ese supuesto, el modelo sensor-only queda como fallback débil.
+\end{beamercolorbox}
+\vspace{0.6cm}
+\slidetag{Regresión temporal}\hspace{0.25cm}\slidetag{Explainability}\hspace{0.25cm}\slidetag{MLOps}\hspace{0.25cm}\slidetag{Soft sensor}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{El modelo funciona, pero el supuesto de datos manda}
+\framesubtitle{Decisión ejecutiva}
+\keymessage{El valor no está en reclamar producción; está en proponer una alerta temprana trazable que depende de qué datos existen realmente al momento de inferencia.}
+\begin{columns}[T]
+\column{0.39\textwidth}
+\begin{beamercolorbox}[wd=\textwidth,sep=0.7em,rounded=true]{metricbox}
+{\scriptsize\color{MinsurGray}Modelo recomendado}\\[-0.02cm]
+{\Large\bfseries\textcolor{MinsurBlue}{Random Forest}}
+\end{beamercolorbox}
+\vspace{0.12cm}
+\metriccard{Test $R^2$}{0.6096}{MinsurGreen}\hfill
+\metriccard{Test MAE}{0.5500}{MinsurGreen}\hfill
+\metriccard{Test RMSE}{0.7474}{MinsurGreen}
+\vspace{0.22cm}
+\begin{beamercolorbox}[wd=\textwidth,sep=0.7em,rounded=true]{decision}
+\textbf{High-frequency agregado}\newline
+RF lab + sensores agregados: $R^2 \approx 0.6190$, MAE $\approx 0.5409$, RMSE $\approx 0.7399$.
+\end{beamercolorbox}
+\vspace{0.15cm}
+\begin{beamercolorbox}[wd=\textwidth,sep=0.7em,rounded=true]{warnbox}
+\textbf{Uso:} alerta temprana / shadow-mode. \textbf{No:} control automático ni recomendación causal.
+\end{beamercolorbox}
+\column{0.57\textwidth}
+\begin{itemize}
+  \item \textbf{Condición crítica:} último laboratorio rezagado disponible con timestamp auditable.
+  \item \textbf{Hallazgo central:} el último resultado de laboratorio explica gran parte de la señal predictiva.
+  \item \textbf{Aporte incremental:} la agregación intra-horaria recupera señal operacional, pero la mejora frente a persistencia es marginal.
+  \item \textbf{Siguiente decisión:} validar SLA real de laboratorio antes de invertir en API productiva.
+\end{itemize}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Los niveles obligatorios están cubiertos; los opcionales son diferenciadores}
+\framesubtitle{Cobertura contra el PDF}
+\keymessage{La defensa debe priorizar Data Science correctness, validación temporal, explicabilidad y MLOps; lo opcional no compensa debilidades en esos puntos.}
+\small
+\begin{tabularx}{\textwidth}{p{0.13\textwidth}p{0.16\textwidth}X p{0.18\textwidth}}
+\toprule
+\textbf{Nivel} & \textbf{Prioridad} & \textbf{Evidencia en la solución} & \textbf{Estado}\\
+\midrule
+Level 1 & Obligatorio & Target, multirresolución, calidad de datos, métricas y baseline. & \status{Completo}{MinsurGreen}\\
+Level 2 & Obligatorio & Split cronológico, lags, rolling features, agregación horaria y modelos no triviales. & \status{Completo}{MinsurGreen}\\
+Level 3 & Obligatorio & SHAP global/local y sensibilidad predictiva con caveat no causal. & \status{Completo}{MinsurGreen}\\
+Level 4 & Opcional & Escenarios what-if comparados contra referencia. & \status{Diferenciador}{MinsurOrange}\\
+Level 5 & Opcional & No se reclama: el PDF exige LangGraph si se intenta. & \status{No reclamado}{MinsurGray}\\
+Level 6 & Obligatorio & MLflow + metadata + feature contracts + auditoría de versiones. & \status{Completo}{MinsurGreen}\\
+Level 7 & Opcional & Solo completo si FastAPI corre; si no, se presenta como extensión posterior. & \status{Extensión}{MinsurOrange}\\
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Arquitectura: de sensores y laboratorio a inferencia trazable}
+\framesubtitle{El sistema no es solo un modelo}
+\keymessage{La arquitectura conecta datos, features, modelo, explicación, escenarios y auditoría; cada predicción debe tener contrato de entrada y trazabilidad.}
+\centering
+\begin{tikzpicture}[node distance=0.38cm and 0.45cm, font=\scriptsize]
+\tikzset{box/.style={rectangle, rounded corners=2pt, draw=MinsurBlue!35, fill=MinsurBlue!7, minimum height=0.72cm, align=center, text width=2.05cm}}
+\tikzset{warn/.style={rectangle, rounded corners=2pt, draw=MinsurOrange!40, fill=MinsurOrange!11, minimum height=0.72cm, align=center, text width=2.05cm}}
+\tikzset{audit/.style={rectangle, rounded corners=2pt, draw=MinsurGreen!40, fill=MinsurGreen!10, minimum height=0.72cm, align=center, text width=2.05cm}}
+\node[box] (raw) {Raw data\\sensores + lab};
+\node[box, right=of raw] (align) {Temporal\\alignment};
+\node[box, right=of align] (fe) {Feature\\engineering};
+\node[box, right=of fe] (portfolio) {Model\\portfolio};
+\node[box, right=of portfolio] (pred) {Prediction\\\% Silica};
+\node[warn, below=of fe] (contract) {Feature contract\\JSON + cutoffs};
+\node[audit, below=of portfolio] (mlflow) {MLflow +\\artifacts};
+\node[box, below=of pred] (shap) {SHAP /\\explainability};
+\node[warn, right=of pred] (scen) {What-if\\sensibilidad};
+\node[box, right=of scen] (api) {API / dashboard\\posterior};
+\draw[-{Latex[length=2mm]}, thick, color=MinsurBlue] (raw) -- (align);
+\draw[-{Latex[length=2mm]}, thick, color=MinsurBlue] (align) -- (fe);
+\draw[-{Latex[length=2mm]}, thick, color=MinsurBlue] (fe) -- (portfolio);
+\draw[-{Latex[length=2mm]}, thick, color=MinsurBlue] (portfolio) -- (pred);
+\draw[-{Latex[length=2mm]}, thick, color=MinsurBlue] (pred) -- (scen);
+\draw[-{Latex[length=2mm]}, thick, color=MinsurBlue] (scen) -- (api);
+\draw[-{Latex[length=2mm]}, thick, color=MinsurGreen] (fe) -- (contract);
+\draw[-{Latex[length=2mm]}, thick, color=MinsurGreen] (portfolio) -- (mlflow);
+\draw[-{Latex[length=2mm]}, thick, color=MinsurBlue] (pred) -- (shap);
+\end{tikzpicture}
+\vspace{0.25cm}
+\decisionbox{So what}{un evaluador debe poder reconstruir qué dato entró, qué modelo respondió, por qué respondió y bajo qué supuesto operativo.}
+\end{frame}
+
+% ============================================================
+\begin{frame}{El problema no es tabular puro: es temporal y multirresolución}
+\framesubtitle{Level 1 - Data Understanding and Problem Framing}
+\keymessage{La primera decisión técnica es alinear sensores de alta frecuencia con laboratorio horario sin introducir información futura.}
+\begin{columns}[T]
+\column{0.55\textwidth}
+\safeimage[width=\textwidth,height=0.58\textheight,keepaspectratio]{raw_to_hourly_reduction.png}{Artefacto visual no disponible.}
+\column{0.41\textwidth}
+\begin{itemize}
+  \item Dataset: aprox. 700k filas.
+  \item Sensores: muestreo cercano a 20 segundos.
+  \item Laboratorio: mediciones de calidad con frecuencia menor, típicamente horaria.
+  \item Target obligatorio: \textbf{\% Silica Concentrate}.
+  \item Validación: split cronológico y baselines de media / persistencia.
+\end{itemize}
+\begin{beamercolorbox}[wd=\textwidth,sep=0.65em,rounded=true]{warnbox}
+\textbf{Regla:} una variable solo puede usarse si existe antes del cutoff de inferencia.
+\end{beamercolorbox}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{El split cronológico evita leakage estadístico; producción exige auditar leakage operacional}
+\framesubtitle{Operational leakage audit}
+\keymessage{Si un dato no existe al momento de inferencia, no debe entrar al modelo productivo aunque mejore el notebook.}
+\scriptsize
+\begin{tabularx}{\textwidth}{p{0.21\textwidth}p{0.14\textwidth}p{0.19\textwidth}p{0.10\textwidth}X}
+\toprule
+\textbf{Dato usado} & \textbf{En dataset} & \textbf{En inferencia} & \textbf{Riesgo} & \textbf{Acción requerida}\\
+\midrule
+\% Silica Concentrate lag 1 & Sí & Depende del SLA lab & Alto & Auditar timestamp de muestra, resultado y publicación.\\
+Sensores agregados por hora & Sí & Validar ventana & Medio & Definir cutoff de inferencia y ventana cerrada.\\
+Variables feed & Sí & Validar fuente online & Medio & Confirmar disponibilidad en tiempo real.\\
+pH / reactivos & Sí & Probable & Bajo/medio & Validar tag, frecuencia y latencia.\\
+Rolling features & Derivadas & Sí, si hay historial & Medio & Garantizar buffer temporal y recomputación estable.\\
+Timestamp calendario & Sí & Sí & Bajo & Controlar timezone y frecuencia.\\
+\bottomrule
+\end{tabularx}
+\vspace{0.18cm}
+\decisionbox{Defensa técnica}{el modelo principal es aceptable como soft sensor si el lag de laboratorio está publicado antes de la predicción; si no, debe degradar a fallback sensor-only.}
+\end{frame}
+
+% ============================================================
+\begin{frame}{La señal se separa en tres bloques: laboratorio rezagado, sensores y agregación intra-horaria}
+\framesubtitle{Level 2 - Feature Engineering and Modeling}
+\keymessage{El feature engineering está diseñado para que la señal temporal sea explícita y auditable, no escondida en una tabla aleatoria.}
+\begin{columns}[T]
+\column{0.33\textwidth}
+\begin{beamercolorbox}[wd=\textwidth,sep=0.7em,rounded=true]{metricbox}
+\textbf{1. Laboratorio rezagado}
+\begin{itemize}\scriptsize
+  \item \texttt{shift(1)}, \texttt{shift(3)}, \texttt{shift(6)}, \texttt{shift(12)}
+  \item Persistencia temporal
+  \item Dominante, pero dependiente del SLA
+\end{itemize}
+\end{beamercolorbox}
+\column{0.33\textwidth}
+\begin{beamercolorbox}[wd=\textwidth,sep=0.7em,rounded=true]{metricbox}
+\textbf{2. Sensores / feed}
+\begin{itemize}\scriptsize
+  \item pH, amina, starch
+  \item niveles y flujos de aire
+  \item rolling mean / std / diffs
+\end{itemize}
+\end{beamercolorbox}
+\column{0.33\textwidth}
+\begin{beamercolorbox}[wd=\textwidth,sep=0.7em,rounded=true]{metricbox}
+\textbf{3. Agregación intra-horaria}
+\begin{itemize}\scriptsize
+  \item mean, std, min, max
+  \item first, last, range, delta
+  \item rescata señal 20s sin leakage
+\end{itemize}
+\end{beamercolorbox}
+\end{columns}
+\vspace{0.25cm}
+\begin{columns}[T]
+\column{0.48\textwidth}
+\decisionbox{Contrato}{\texttt{feature\_columns.json} y \texttt{feature\_columns\_strict\_no\_lab\_input.json} separan modelo principal y fallback.}
+\column{0.48\textwidth}
+\decisionbox{Portfolio}{RF principal, RF agregado y fallback sensor-only; selección con validación temporal.}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{La mejora predictiva existe, pero la persistencia ya explica gran parte}
+\framesubtitle{Benchmarks y lectura honesta}
+\keymessage{La mejora frente al baseline autoregresivo es marginal; el valor adicional está en trazabilidad, fallback, sensibilidad y disciplina MLOps.}
+\begin{columns}[T]
+\column{0.49\textwidth}
+\safeimage[width=\textwidth,height=0.57\textheight,keepaspectratio]{high_frequency_aggregation_r2_comparison.png}{Comparar $R^2$: persistence 0.5965, RF principal 0.6096, RF lab + sensores agregados 0.6190, sensor-only agregado 0.1260.}
+\column{0.49\textwidth}
+\scriptsize
+\begin{tabularx}{\textwidth}{Xrrr}
+\toprule
+\textbf{Modelo} & \textbf{MAE} & \textbf{RMSE} & \textbf{$R^2$}\\
+\midrule
+Persistence lag 1 & -- & 0.7614 & 0.5965\\
+RF principal trazado & 0.5500 & 0.7474 & 0.6096\\
+RF lab + sensores agregados & 0.5409 & 0.7399 & 0.6190\\
+RF sensor-only agregado & 0.8921 & 1.1197 & 0.1260\\
+\bottomrule
+\end{tabularx}
+\vspace{0.16cm}
+\begin{beamercolorbox}[wd=\textwidth,sep=0.65em,rounded=true]{warnbox}
+\textbf{Mejora RMSE vs persistencia}\newline
+RF principal: aprox. 1.8\%. RF agregado: aprox. 2.8\%.
+\end{beamercolorbox}
+\smallnote{No se oculta el baseline fuerte: se usa para acotar el valor real del modelo.}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{El promedio de error no basta: hay que ver cuándo falla}
+\framesubtitle{Performance operacional}
+\keymessage{El piloto shadow-mode debe validar errores por ventana, por régimen operacional y especialmente en rangos altos de sílice.}
+\begin{columns}[T]
+\column{0.50\textwidth}
+\safeimage[width=\textwidth,height=0.57\textheight,keepaspectratio]{real_vs_predicted_test.png}{Artefacto visual no disponible.}
+\column{0.50\textwidth}
+\safeimage[width=\textwidth,height=0.57\textheight,keepaspectratio]{temporal_residuals.png}{Artefacto visual no disponible.}
+\end{columns}
+\vspace{0.12cm}
+\decisionbox{Lectura}{un buen $R^2$ promedio no garantiza utilidad si el modelo falla cuando la planta se aleja de condiciones normales.}
+\end{frame}
+
+% ============================================================
+\begin{frame}{SHAP explica memoria de calidad, no causalidad metalúrgica}
+\framesubtitle{Level 3 - Explainability global}
+\keymessage{La explicación global es defendible si se interpreta como comportamiento predictivo del modelo, no como relación causal de planta.}
+\begin{columns}[T]
+\column{0.56\textwidth}
+\safeimage[width=\textwidth,height=0.60\textheight,keepaspectratio]{shap_bar.png}{SHAP global: driver esperado dominante = \% Silica Concentrate lag 1; lectura = persistencia temporal.}
+\column{0.40\textwidth}
+\begin{itemize}
+  \item Driver dominante: \textbf{\% Silica Concentrate lag 1}.
+  \item En tabla horaria, \texttt{lag\_1} equivale aprox. a una hora antes.
+  \item Lectura correcta: \textbf{memoria temporal de calidad}.
+  \item Lectura incorrecta: “subir la sílice pasada causa la sílice futura”.
+\end{itemize}
+\begin{beamercolorbox}[wd=\textwidth,sep=0.65em,rounded=true]{warnbox}
+\textbf{Uso:} explicar alertas y priorizar revisión operacional; no prescribir acciones automáticas.
+\end{beamercolorbox}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Una predicción debe venir con motivo, supuesto y advertencia}
+\framesubtitle{Explainability local para una alerta}
+\keymessage{La explicación local convierte una predicción aislada en un mensaje accionable: qué empujó el riesgo, bajo qué supuesto y con qué caveat.}
+\begin{columns}[T]
+\column{0.57\textwidth}
+\safeimage[width=\textwidth,height=0.60\textheight,keepaspectratio]{shap_waterfall_0_representative_case.png}{Waterfall SHAP local: mostrar señales que empujan la predicción arriba o abajo para un caso representativo.}
+\column{0.39\textwidth}
+\begin{beamercolorbox}[wd=\textwidth,sep=0.7em,rounded=true]{metricbox}
+\textbf{Formato recomendado de alerta}\vspace{0.1cm}
+\begin{itemize}\scriptsize
+  \item Predicción estimada de \% Silica.
+  \item Top drivers locales.
+  \item Supuesto: laboratorio \texttt{lag\_1} disponible.
+  \item Warning: sensibilidad predictiva, no causal.
+\end{itemize}
+\end{beamercolorbox}
+\vspace{0.15cm}
+\decisionbox{So what}{el operador recibe una explicación auditable, no una caja negra ni una orden automática.}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{El laboratorio rezagado es la feature crítica}
+\framesubtitle{Sensibilidad por delay de laboratorio}
+\keymessage{Antes de mejorar algoritmos, hay que validar el SLA real del laboratorio: el desempeño cae rápido cuando el laboratorio reciente no está disponible.}
+\begin{columns}[T]
+\column{0.58\textwidth}
+\safeimage[width=\textwidth,height=0.60\textheight,keepaspectratio]{lab_delay_availability_r2.png}{Comparar validación: lag 1 = 0.5876; lag 3 = 0.2626; lag 6 = 0.0486; no recent lab = 0.0595.}
+\column{0.38\textwidth}
+\small
+\begin{tabularx}{\textwidth}{Xr}
+\toprule
+\textbf{Escenario} & \textbf{Val $R^2$}\\
+\midrule
+lag 1 available & 0.5876\\
+lag 3 available & 0.2626\\
+lag 6 available & 0.0486\\
+no recent lab available & 0.0595\\
+\bottomrule
+\end{tabularx}
+\vspace{0.20cm}
+\begin{beamercolorbox}[wd=\textwidth,sep=0.65em,rounded=true]{riskbox}
+\textbf{Riesgo principal}\newline
+Si el laboratorio no está publicado a tiempo, el modelo principal no es válido para inferencia real.
+\end{beamercolorbox}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{MLOps convierte el notebook en un activo auditable}
+\framesubtitle{Level 6 - Experiment Management}
+\keymessage{La evidencia no es “usé MLflow”; es que un evaluador puede reconstruir modelo, features, métricas, supuestos y artefactos seleccionados.}
+\begin{columns}[T]
+\column{0.55\textwidth}
+\safeimage[width=\textwidth,height=0.58\textheight,keepaspectratio]{mlflow_ui_runs.png}{Artefacto visual no disponible.}
+\column{0.41\textwidth}
+\scriptsize
+\begin{tabularx}{\textwidth}{X}
+\toprule
+\textbf{Evidencia auditable}\\
+\midrule
+\texttt{selected\_model\_metadata.json}\\
+\texttt{feature\_columns.json}\\
+\texttt{feature\_columns\_strict\_no\_lab\_input.json}\\
+\texttt{model\_version\_audit.csv}\\
+\texttt{mlflow\_runs\_audit.csv}\\
+\texttt{reproducibility\_artifact\_checklist.csv}\\
+\texttt{mlops\_summary.md}\\
+Modelos versionados en \texttt{models/selected/}\\
+\bottomrule
+\end{tabularx}
+\vspace{0.15cm}
+\smallnote{Claim controlado: tracking local + artefactos exportados. No se afirma MLOps enterprise.}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{What-if prioriza conversaciones con metalurgia; no recomienda acciones causales}
+\framesubtitle{Level 4 - Scenario Analysis como diferenciador}
+\keymessage{Los escenarios cuantifican sensibilidad predictiva bajo el modelo; deben validarse con expertos antes de traducirse a decisiones operativas.}
+\begin{columns}[T]
+\column{0.57\textwidth}
+\safeimage[width=\textwidth,height=0.60\textheight,keepaspectratio]{scenario_impact_heatmap.png}{Artefacto visual no disponible.}
+\column{0.39\textwidth}
+\begin{itemize}
+  \item Escenarios comparados contra un estado de referencia.
+  \item Variables: Amina, Starch, pH, niveles y flujos de aire.
+  \item Resultado: delta predictivo en \% Silica Concentrate.
+  \item Caveat: no optimización automática ni causalidad.
+\end{itemize}
+\smallnote{Uso correcto: generar hipótesis de discusión con operación y metalurgia; nunca traducir directamente a control automático.}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Level 7: diseño de API posterior al shadow-mode}
+\framesubtitle{No reclamar como completo si FastAPI no está corriendo}
+\keymessage{La API es una extensión lógica, pero debe venir después de validar timestamps, contrato de features y comportamiento en shadow-mode.}
+\begin{columns}[T]
+\column{0.49\textwidth}
+\begin{beamercolorbox}[wd=\textwidth,sep=0.75em,rounded=true]{metricbox}
+\textbf{Contrato propuesto}\vspace{0.1cm}
+\begin{itemize}\scriptsize
+  \item \texttt{/health}: estado de servicio.
+  \item \texttt{/model-info}: versión, métricas y supuestos.
+  \item \texttt{/features}: contrato de variables.
+  \item \texttt{/predict}: inferencia de \% Silica.
+  \item \texttt{/simulate}: escenarios what-if.
+\end{itemize}
+\end{beamercolorbox}
+\column{0.49\textwidth}
+\begin{beamercolorbox}[wd=\textwidth,sep=0.75em,rounded=true]{warnbox}
+\textbf{Guardrails mínimos}\vspace{0.1cm}
+\begin{itemize}\scriptsize
+  \item Validación de input y features faltantes.
+  \item Verificación de disponibilidad de laboratorio rezagado.
+  \item Fallback sensor-only si no hay laboratorio reciente.
+  \item Logging de request, modelo y drift signals.
+  \item Manejo de errores y trazabilidad.
+\end{itemize}
+\end{beamercolorbox}
+\end{columns}
+\vspace{0.2cm}
+\decisionbox{Claim recomendado}{si FastAPI no existe corriendo, presentar Level 7 como roadmap; si existe, mostrar evidencia con endpoint y validación.}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Cuatro riesgos definen si el prototipo puede pasar a planta}
+\framesubtitle{Limitaciones y condiciones de despliegue}
+\keymessage{El riesgo principal no es el algoritmo; es usar una feature que no está disponible, estable o bien timestamped cuando el sistema predice.}
+\small
+\begin{tabularx}{\textwidth}{p{0.24\textwidth}X p{0.28\textwidth}}
+\toprule
+\textbf{Riesgo} & \textbf{Impacto} & \textbf{Mitigación}\\
+\midrule
+Delay real de laboratorio no confirmado & El modelo principal puede tener leakage operacional. & Auditar timestamps de muestra, resultado y publicación.\\
+Variables feed no disponibles online & Features entrenadas no existen en inferencia. & Contrato de features + validación con sistemas de planta.\\
+Drift o calibración de sensores & Desempeño se degrada fuera de régimen histórico. & Monitoreo de drift, recalibración y revisión semanal.\\
+What-if interpretado causalmente & Riesgo de acciones incorrectas en planta. & Etiquetar como sensibilidad predictiva y validar con metalurgia.\\
+\bottomrule
+\end{tabularx}
+\vspace{0.20cm}
+\decisionbox{Condición de despliegue}{shadow-mode antes de API productiva, con revisión de errores por rango alto de sílice y por ventana temporal.}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Antes de API productiva: shadow-mode y auditoría de timestamps}
+\framesubtitle{Roadmap de producción}
+\keymessage{La siguiente decisión no es desplegar directo; es probar en paralelo, medir fallas reales y cerrar brechas de datos.}
+\centering
+\begin{tikzpicture}[node distance=0.45cm and 0.4cm, font=\scriptsize]
+\tikzset{phase/.style={rectangle, rounded corners=3pt, draw=MinsurBlue!35, fill=MinsurBlue!7, text width=2.65cm, minimum height=1.25cm, align=center}}
+\node[phase] (p0) {\textbf{0. Auditoría}\\timestamps lab + cutoffs};
+\node[phase, right=of p0] (p1) {\textbf{1. Shadow-mode}\\4-6 semanas};
+\node[phase, right=of p1] (p2) {\textbf{2. Validación}\\errores por régimen y rangos altos};
+\node[phase, right=of p2] (p3) {\textbf{3. Registry}\\modelo, features, drift};
+\node[phase, right=of p3] (p4) {\textbf{4. API/dashboard}\\con guardrails};
+\draw[-{Latex[length=2mm]}, thick, color=MinsurBlue] (p0) -- (p1);
+\draw[-{Latex[length=2mm]}, thick, color=MinsurBlue] (p1) -- (p2);
+\draw[-{Latex[length=2mm]}, thick, color=MinsurBlue] (p2) -- (p3);
+\draw[-{Latex[length=2mm]}, thick, color=MinsurBlue] (p3) -- (p4);
+\end{tikzpicture}
+\vspace{0.45cm}
+\begin{beamercolorbox}[wd=0.92\textwidth,sep=0.8em,rounded=true]{decision}
+\textbf{Call to action:} aprobar piloto shadow-mode con revisión semanal entre Analytics, Operación y Metalurgia; no pasar a recomendación operativa hasta validar delay real, estabilidad de variables y error en eventos relevantes.
+\end{beamercolorbox}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Sí hay valor, pero depende del dato correcto en el momento correcto}
+\framesubtitle{Conclusión ejecutiva final}
+\keymessage{La propuesta es defendible si se presenta como soft sensor auditable, no como sistema de control ni como prueba causal.}
+\begin{columns}[T]
+\column{0.50\textwidth}
+\begin{itemize}
+  \item Predicción de \% Silica Concentrate con $R^2 \approx 0.61$ y RMSE $\approx 0.75$ bajo supuesto de laboratorio rezagado.
+  \item Baseline autoregresivo fuerte reconocido: la mejora existe, pero es marginal.
+  \item Explicabilidad clara: SHAP evidencia persistencia temporal, no causalidad metalúrgica.
+  \item MLOps local auditable: MLflow, metadata, feature contracts y modelos seleccionados.
+\end{itemize}
+\column{0.46\textwidth}
+\begin{beamercolorbox}[wd=\textwidth,sep=0.8em,rounded=true]{metricbox}
+\textbf{Recomendación}\vspace{0.1cm}
+\begin{enumerate}\scriptsize
+  \item Validar SLA real de laboratorio.
+  \item Confirmar disponibilidad online de variables feed.
+  \item Correr shadow-mode 4-6 semanas.
+  \item Formalizar registry, drift monitoring y API solo después.
+\end{enumerate}
+\end{beamercolorbox}
+\vspace{0.12cm}
+\decisionbox{Defensa}{útil como alerta temprana trazable si el dato crítico existe a tiempo.}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\appendix
+\begin{frame}[plain]
+\centering
+\vspace{1.6cm}
+{\Huge\bfseries\color{MinsurNavy}Appendix}\\[0.25cm]
+{\Large\color{MinsurBlue}Evidencia adicional y controles de defensa}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Appendix A: matriz ampliada de cobertura}
+\scriptsize
+\begin{tabularx}{\textwidth}{p{0.12\textwidth}X X}
+\toprule
+\textbf{Nivel} & \textbf{Qué pide el PDF} & \textbf{Cómo se responde}\\
+\midrule
+1 & Target, inputs, calidad de datos, frecuencias, métricas, baseline. & Framing temporal, tabla horaria, target silica, métricas MAE/RMSE/$R^2$, baseline persistencia.\\
+2 & Feature engineering temporal, leakage control, modelo no trivial, evaluación completa. & Lags/rolling/agregados, split cronológico, RF principal + fallback, benchmarks y análisis operacional.\\
+3 & Drivers, explicación global/local, efecto de variables, coherencia. & SHAP bar + waterfall + escenarios con caveat predictivo.\\
+4 & Simulación de escenarios y trade-offs. & Heatmap/tornado what-if como sensibilidad del modelo.\\
+5 & LangGraph obligatorio si se intenta. & No reclamado para evitar claim no sustentado.\\
+6 & Tracking, versiones, reproducibilidad, supuestos. & MLflow local, JSON/CSV auditables, modelos seleccionados y checklist.\\
+7 & Endpoints, validación, errores. & Diseño posterior; completo solo si FastAPI está funcionando.\\
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Appendix B: high-frequency aggregation recupera señal operacional}
+\framesubtitle{No reemplaza al laboratorio, pero mejora el fallback}
+\begin{columns}[T]
+\column{0.54\textwidth}
+\safeimage[width=\textwidth,height=0.60\textheight,keepaspectratio]{sensor_only_aggregated_feature_importance.png}{Feature importance sensor-only agregado: usar para explicar qué sensores aportan señal cuando no hay laboratorio.}
+\column{0.42\textwidth}
+\begin{itemize}
+  \item Sensor-only mejora de $R^2 \approx 0.048$ a $R^2 \approx 0.126$ al agregar intra-hora.
+  \item Aun así, no alcanza para modelo principal.
+  \item Su rol defendible: fallback y monitoreo cuando no hay laboratorio reciente.
+\end{itemize}
+\decisionbox{Lectura}{la telemetría aporta señal, pero la calidad reciente del laboratorio domina.}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Appendix C: distribución y temporalidad del target}
+\begin{columns}[T]
+\column{0.50\textwidth}
+\safeimage[width=\textwidth,height=0.58\textheight,keepaspectratio]{target_distribution.png}{Distribución del target: revisar skew, colas y rangos donde importa más el error.}
+\column{0.50\textwidth}
+\safeimage[width=\textwidth,height=0.58\textheight,keepaspectratio]{target_temporal.png}{Serie temporal del target: revisar cambios de régimen, drift y ventanas de validación.}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Appendix D: residuales y errores por periodo}
+\begin{columns}[T]
+\column{0.50\textwidth}
+\safeimage[width=\textwidth,height=0.58\textheight,keepaspectratio]{residuals_distribution.png}{Distribución de residuales: revisar sesgo, colas y errores extremos.}
+\column{0.50\textwidth}
+\safeimage[width=\textwidth,height=0.58\textheight,keepaspectratio]{mae_by_month.png}{MAE por mes: detectar ventanas inestables o cambios de régimen.}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Appendix E: SHAP summary y casos extremos}
+\begin{columns}[T]
+\column{0.50\textwidth}
+\safeimage[width=\textwidth,height=0.58\textheight,keepaspectratio]{shap_summary.png}{SHAP summary: distribución de impactos por feature, no lectura causal.}
+\column{0.50\textwidth}
+\safeimage[width=\textwidth,height=0.58\textheight,keepaspectratio]{shap_waterfall_0_high_error_case.png}{Waterfall de caso con alto error: usar para discutir límites del modelo.}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Appendix F: PDP solo como comportamiento del modelo, no causalidad}
+\keymessage{Partial dependence refleja cómo responde el modelo al variar una feature manteniendo supuestos estadísticos; no representa necesariamente la respuesta física del proceso.}
+\begin{columns}[T]
+\column{0.50\textwidth}
+\safeimage[width=\textwidth,height=0.58\textheight,keepaspectratio]{pdp_silica_concentrate_lag_1.png}{PDP de lag 1: comportamiento predictivo asociado a persistencia temporal.}
+\column{0.50\textwidth}
+\safeimage[width=\textwidth,height=0.58\textheight,keepaspectratio]{pdp_ore_pulp_ph.png}{PDP de pH: interpretar con cuidado y validar con metalurgia.}
+\end{columns}
+\end{frame}
+
+\end{document}
