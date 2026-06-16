@@ -248,3 +248,61 @@ streamlit run app.py
 
 The app is resilient to missing artifacts: if a CSV/JSON/model/image is unavailable,
 it shows a warning and continues with available evidence.
+
+---
+
+## Level 7 - API Exposure
+
+Run API:
+
+```bash
+python -m uvicorn src.api:app --reload --host 127.0.0.1 --port 8000
+```
+
+Open API docs:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+Run Streamlit demo:
+
+```bash
+streamlit run app.py
+```
+
+Run tests:
+
+```bash
+python -m pytest tests
+```
+
+## Operational assumptions
+
+- The recommended model depends on lagged-lab availability.
+- `lag_1` is approximately 1 hour in the hourly modeling table.
+- If no recent lab is available, use the fallback with lower predictive performance.
+- What-if analysis is predictive sensitivity, not causality.
+- The system is decision support, not automatic plant control.
+
+---
+
+## Level 7 - API Exposure
+
+Run API:
+
+```bash
+python -m uvicorn src.api:app --reload --host 127.0.0.1 --port 8000
+```
+
+Open docs:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+Run Streamlit demo:
+
+```bash
+streamlit run app.py
+```

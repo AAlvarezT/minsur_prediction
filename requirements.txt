@@ -17,6 +17,14 @@ seaborn>=0.12.0
 plotly>=5.20.0
 streamlit>=1.34.0
 
+# API exposure
+fastapi>=0.115.0
+uvicorn>=0.30.0
+pydantic>=2.7.0
+
+# Testing
+pytest>=8.0.0
+
 # Persistence
 joblib>=1.3.0
 
