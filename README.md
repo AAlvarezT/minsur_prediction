@@ -232,3 +232,19 @@ See `requirements.txt`. Key dependencies:
 - `matplotlib`, `seaborn` — visualisation
 - `joblib` — model persistence
 - `kagglehub` — dataset download
+
+---
+
+## Streamlit Data-Driven Quality System
+
+This repository includes an executive prototype app to present prediction, explainability,
+what-if sensitivity, laboratory delay risk, and MLOps traceability for `% Silica Concentrate`.
+
+Run locally from the project root:
+
+```bash
+streamlit run app.py
+```
+
+The app is resilient to missing artifacts: if a CSV/JSON/model/image is unavailable,
+it shows a warning and continues with available evidence.
