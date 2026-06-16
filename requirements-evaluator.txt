@@ -1,0 +1,3 @@
+# Dependencias minimas para validacion de entrega (auditoria + figuras + PDF opcional)
+pandas==2.3.0
+matplotlib==3.10.3

@@ -181,6 +181,36 @@ Instalacion minima:
 pip install -r requirements.txt
 ```
 
+## Reproducibilidad para evaluador (recomendado)
+Si no quieres invertir tiempo armando el entorno manualmente, usa estos comandos en PowerShell desde la raiz del repo.
+
+1. Setup rapido para evaluador (crea `.venv_eval` e instala solo dependencias minimas):
+```powershell
+./scripts/setup_reproducible_env.ps1
+```
+
+Si quieres el entorno completo del proyecto:
+```powershell
+./scripts/setup_reproducible_env.ps1 -Perfil completo
+```
+
+2. Reproducir la entrega completa de evidencia (auditoria + figuras + PDF opcional):
+```powershell
+./scripts/reproducir_entrega.ps1
+```
+
+Para usar setup completo desde el mismo comando:
+```powershell
+./scripts/reproducir_entrega.ps1 -Perfil completo
+```
+
+Notas:
+- El perfil evaluador usa `requirements-evaluator.txt` (minimo para validar evidencias).
+- El perfil completo prioriza `requirements-lock.txt` (versiones exactas), y usa `requirements.txt` si no existe lockfile.
+- El setup usa un entorno aislado `\.venv_eval` para no romper tu entorno de desarrollo existente.
+- Si `pdflatex` no esta instalado, el flujo continua y solo omite la compilacion de Beamer.
+- El resumen de verificacion queda en `reports/metrics/project_audit_summary.md`.
+
 ## Limitaciones y afirmaciones que NO se deben hacer
 - No afirmar causalidad fisica del proceso con SHAP/PDP.
 - No afirmar despliegue productivo final.
