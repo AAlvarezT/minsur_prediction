@@ -7,9 +7,9 @@
   "availability_assumption": "Recent lab results are not available; only older lab history is accessible.",
   "best_model_name": "Random Forest",
   "validation_metrics": {
-    "MAE": 0.8034,
-    "RMSE": 1.0064,
-    "R2": 0.0486
+    "MAE": 0.8009,
+    "RMSE": 1.0079,
+    "R2": 0.0519
   },
   "feature_columns": [
     "% Iron Feed",

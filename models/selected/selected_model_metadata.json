@@ -1,8 +1,8 @@
 {
   "selection_protocol": "Validation RMSE only; test used only after all final roles were fixed.",
   "saved_model_role": "recommended_model_with_lagged_lab_assumption",
-  "saved_model_path": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\models\\selected\\model_lagged_lab_assumption.pkl",
-  "feature_columns_path": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\models\\selected\\feature_columns.json",
+  "saved_model_path": "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\models\\selected\\model_lagged_lab_assumption.pkl",
+  "feature_columns_path": "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\models\\selected\\feature_columns.json",
   "best_statistical_model": {
     "scenario": "Feed ON + TargetLags ON",
     "model_name": "Extra Trees Regressor",
@@ -56,8 +56,8 @@
       "verbose": 0,
       "warm_start": false
     },
-    "model_path": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\models\\selected\\model_lagged_lab_assumption.pkl",
-    "feature_columns_path": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\models\\selected\\feature_columns.json",
+    "model_path": "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\models\\selected\\model_lagged_lab_assumption.pkl",
+    "feature_columns_path": "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\models\\selected\\feature_columns.json",
     "note": "Recommended primary model under the explicit assumption that the latest laboratory result is already available before inference. Only past target lags (`shift(1)` or greater) are used; no contemporaneous target is used as predictor."
   },
   "strict_no_lab_input_fallback": {
@@ -96,22 +96,22 @@
       "verbose": 0,
       "warm_start": false
     },
-    "model_path": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\models\\selected\\model_strict_no_lab_input.pkl",
-    "feature_columns_path": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\models\\selected\\feature_columns_strict_no_lab_input.json",
+    "model_path": "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\models\\selected\\model_strict_no_lab_input.pkl",
+    "feature_columns_path": "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\models\\selected\\feature_columns_strict_no_lab_input.json",
     "note": "Conservative fallback without lagged laboratory quality inputs. If this option shows weak test performance, it indicates that sensor/process variables alone are not capturing enough target variability."
   },
   "artifacts": {
-    "validation_sensitivity_table": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\reports\\metrics\\validation_sensitivity_table.csv",
-    "performance_vs_operational_leakage_risk": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\reports\\metrics\\performance_vs_operational_leakage_risk.csv",
-    "final_selected_models_test_metrics": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\reports\\metrics\\final_selected_models_test_metrics.csv",
-    "experiment_log_csv": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\reports\\metrics\\experiment_log.csv",
-    "leaderboard_csv": "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\reports\\metrics\\mlflow_leaderboard.csv",
+    "validation_sensitivity_table": "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\reports\\metrics\\validation_sensitivity_table.csv",
+    "performance_vs_operational_leakage_risk": "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\reports\\metrics\\performance_vs_operational_leakage_risk.csv",
+    "final_selected_models_test_metrics": "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\reports\\metrics\\final_selected_models_test_metrics.csv",
+    "experiment_log_csv": "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\reports\\metrics\\experiment_log.csv",
+    "leaderboard_csv": "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\reports\\metrics\\mlflow_leaderboard.csv",
     "figures": [
-      "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\reports\\figures\\real_vs_predicted_val.png",
-      "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\reports\\figures\\residuals_distribution.png",
-      "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\reports\\figures\\temporal_residuals.png",
-      "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\reports\\figures\\mae_by_month.png",
-      "\\\\fileserv\\alumnos\\A.alvarezdelatorres\\Desktop\\MINSUR\\minsur-quality-prediction\\reports\\figures\\real_vs_predicted_test.png"
+      "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\reports\\figures\\real_vs_predicted_val.png",
+      "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\reports\\figures\\residuals_distribution.png",
+      "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\reports\\figures\\temporal_residuals.png",
+      "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\reports\\figures\\mae_by_month.png",
+      "C:\\Users\\ADMIN\\MINSUR\\minsur_prediction\\reports\\figures\\real_vs_predicted_test.png"
     ]
   },
   "reproducibility": {
@@ -128,7 +128,7 @@
       "status": "mlflow_logged",
       "experiment_name": "MINSUR Silica Prediction - Temporal Modeling",
       "run_name": "MINSUR Silica Prediction - Temporal Modeling | best_statistical_model | Feed ON + TargetLags ON | Extra Trees Regressor",
-      "run_id": "b8571f19d4d74daeac7346c25bbb34d2"
+      "run_id": "75501c88b0064be181840e1529771204"
     },
     {
       "selection_role": "recommended_model_with_lagged_lab_assumption",
@@ -137,7 +137,7 @@
       "status": "mlflow_logged",
       "experiment_name": "MINSUR Silica Prediction - Temporal Modeling",
       "run_name": "MINSUR Silica Prediction - Temporal Modeling | recommended_model_with_lagged_lab_assumption | Feed ON + TargetLags ON | Extra Trees Regressor",
-      "run_id": "f3e8a844220d463584dd0ac2dfb8f2bd"
+      "run_id": "1d50d4a22ecf4a62be1be5626657de99"
     },
     {
       "selection_role": "strict_no_lab_input_fallback",
@@ -146,7 +146,7 @@
       "status": "mlflow_logged",
       "experiment_name": "MINSUR Silica Prediction - Temporal Modeling",
       "run_name": "MINSUR Silica Prediction - Temporal Modeling | strict_no_lab_input_fallback | Feed ON + TargetLags OFF | Random Forest",
-      "run_id": "b5be3fa5b4e244cd9fc7f6db23c6653f"
+      "run_id": "6c4c78830381424d9ebde020224a8edd"
     }
   ]
 }

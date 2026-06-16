@@ -60,7 +60,7 @@
 
 ## Reproducibility status
 
-- Artifact checklist status: PASS
+- Artifact checklist status: PARTIAL
 
 
 

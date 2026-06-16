@@ -6,11 +6,11 @@
     12
   ],
   "availability_assumption": "The latest lab result available is at least 3 hours old.",
-  "best_model_name": "Extra Trees Regressor",
+  "best_model_name": "Random Forest",
   "validation_metrics": {
-    "MAE": 0.6552,
-    "RMSE": 0.886,
-    "R2": 0.2626
+    "MAE": 0.6746,
+    "RMSE": 0.9009,
+    "R2": 0.2426
   },
   "feature_columns": [
     "% Iron Feed",

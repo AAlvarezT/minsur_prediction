@@ -9,9 +9,9 @@
   "availability_assumption": "The latest lab result from roughly 1 hour ago is available at inference time.",
   "best_model_name": "Random Forest",
   "validation_metrics": {
-    "MAE": 0.4856,
-    "RMSE": 0.6626,
-    "R2": 0.5876
+    "MAE": 0.495,
+    "RMSE": 0.6667,
+    "R2": 0.5851
   },
   "feature_columns": [
     "% Iron Feed",
