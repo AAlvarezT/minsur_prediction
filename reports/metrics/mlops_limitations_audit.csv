@@ -1,0 +1,8 @@
+limitation
+"MLflow is local, not centralized."
+No formal Model Registry with stages/aliases.
+No automated retraining pipeline.
+No online drift monitoring in production.
+Operational validity depends on real lab delay behavior.
+Sensor-only fallback performance is weak relative to primary model.
+What-if scenarios are predictive and not causal recommendations.

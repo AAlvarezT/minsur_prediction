@@ -1,0 +1,5 @@
+Scenario,Availability assumption,Allowed lags,Best model,Validation MAE,Validation RMSE,Validation R2,Test MAE,Test RMSE,Test R2,MAE improvement vs baseline (%),RMSE improvement vs baseline (%)
+lag_1_available,The latest lab result from roughly 1 hour ago is available at inference time.,"1, 3, 6, 12",Random Forest,0.495,0.6667,0.5851,0.5532,0.7484,0.6096,44.32,37.84
+lag_3_available,The latest lab result available is at least 3 hours old.,"3, 6, 12",Random Forest,0.6746,0.9009,0.2426,0.7774,0.9931,0.3125,21.75,17.52
+lag_6_available,Recent lab results are not available; only older lab history is accessible.,"6, 12",Random Forest,0.8009,1.0079,0.0519,0.9244,1.1415,0.0916,6.96,5.19
+no_recent_lab_available,No recent lab values are available; the model is strictly sensor-only.,none,Random Forest,0.8188,1.0291,0.0115,0.9463,1.1868,0.0182,4.75,1.43

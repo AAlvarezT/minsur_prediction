@@ -1,0 +1,5 @@
+check,value,expected,status
+main_feature_count,261,> 0,pass
+fallback_feature_count,257,> 0,pass
+main_includes_target_lags,True,True,pass
+fallback_excludes_target_lags,True,True,pass

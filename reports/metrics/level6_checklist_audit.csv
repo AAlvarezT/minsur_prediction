@@ -1,0 +1,9 @@
+Requirement,Evidence in project,Status,Notes
+"Track experiments, parameters and metrics","mlflow_runs_audit.csv, mlflow_leaderboard_audit.csv, mlruns/",✅,MLflow + local CSV fallback used.
+Manage model versions,"model_version_audit.csv, models/selected/*.pkl",✅,Selected/fallback/sensitivity/legacy statuses assigned.
+Clearly identify selected model,selected_model_metadata.json summary table,✅,Primary model and fallback explicitly documented.
+Ensure training reproducibility,"config.yaml, metadata roles, feature lists",✅,Configuration and selected artifacts are traceable.
+Ensure inference reproducibility,"reproducibility_artifact_checklist.csv, feature_consistency_audit.csv",✅,Required artifacts and schema constraints audited.
+Document assumptions,operational_assumptions_audit.csv,✅,Operational assumptions and mitigations formalized.
+Document configurations,config.yaml and metadata references in audit,✅,"Tracking URI, paths, and flags captured."
+Document limitations,"mlops_limitations_audit.csv, roadmap table",✅,Gaps and next actions clearly stated.

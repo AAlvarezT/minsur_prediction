@@ -1,0 +1,9 @@
+next_step,priority,reason,owner_candidate,expected_output
+Migrate MLflow to SQLite/PostgreSQL backend,High,Enable robust persistence and concurrent tracking.,ML Engineer,"Centralized, stable MLflow tracking backend."
+Formalize Model Registry,High,Add controlled promotion/version governance.,MLOps Engineer,Registered model with stage/alias workflow.
+Validate lab delay with operations,High,Primary model relies on lagged lab availability.,Process + Data Team,Documented SLA for lab turnaround.
+Build inference pipeline,High,Operationalize reproducible scoring.,Data Engineer,Scheduled/streaming inference job with schema checks.
+Monitor feature drift and prediction drift,High,Detect distribution shift early.,MLOps Engineer,Drift dashboards and alerting.
+Add scheduled retraining,Medium,Maintain performance over time.,ML Engineer,Retraining workflow with approval gates.
+Expose API only after validation,Medium,Prevent unvalidated deployment decisions.,Platform Team,Controlled model-serving endpoint.
+Validate what-if scenarios with metallurgists,High,Ensure domain-consistent interpretation.,Metallurgy Team,Scenario acceptance criteria and guardrails.

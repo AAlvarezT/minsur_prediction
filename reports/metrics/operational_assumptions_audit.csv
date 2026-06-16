@@ -1,0 +1,9 @@
+assumption,where_documented,why_it_matters,risk,mitigation
+Lagged lab availability assumption,"selected_model_metadata.json, notebooks 02/03/04",Primary model validity depends on latest lab result being available.,"If lab delay is longer, inference assumptions break.",Use strict fallback and validate real lab turnaround with operations.
+Hourly modeling frequency,config.yaml:data.modeling_frequency,Defines temporal granularity for features and lags.,Mismatched operational cadence reduces reliability.,Align inference schedule to 1h windows.
+Feed variable availability,selected_model_metadata.json:uses_feed_variables,Main model uses feed chemistry features.,Missing feed variables causes schema/inference failures.,Monitor feed data pipelines and fallback when unavailable.
+No contemporaneous target leakage,feature_engineering.py (lag-only target usage),Prevents leakage and inflated metrics.,Using current target at inference is invalid.,Keep only lagged target inputs and schema validation.
+Sensor-only fallback weakness,selected_model_metadata.json strict fallback metrics,Fallback has lower predictive power.,Lower quality predictions under strict constraints.,Treat as conservative fallback and improve sensor feature set.
+"What-if simulations are predictive, not causal",notebook 04 disclaimer and conclusions,Avoids misuse as control policy.,Operational decisions based on causal misinterpretation.,Use as decision-support with expert validation.
+MLflow local tracking limitation,config.yaml mlruns local URI,No centralized multi-user governance by default.,Limited collaboration and retention controls.,Migrate MLflow backend to managed DB/server.
+Model Registry not implemented in prototype,project scope and current artifacts,No formal stage transitions/aliases.,Manual model promotion and version ambiguity.,Formalize Model Registry with stages and aliases.

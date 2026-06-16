@@ -1,0 +1,11 @@
+feature,mean_abs_shap
+% Silica Concentrate_lag_1,0.6147770652960746
+% Silica Concentrate_lag_3,0.11310142643250708
+month,0.032137801875837334
+Ore Pulp pH,0.005796194537891405
+Ore Pulp pH_lag_1,0.005456379099829777
+Flotation Column 03 Air Flow_roll_mean_12,0.005321870690986718
+Ore Pulp pH_lag_3,0.005097485589512851
+Ore Pulp pH_roll_mean_3,0.005051497900933024
+Ore Pulp pH_roll_mean_6,0.0047440847685739
+Ore Pulp Density_lag_1,0.004701053509043266

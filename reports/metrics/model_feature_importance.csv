@@ -1,0 +1,262 @@
+feature,importance
+% Silica Concentrate_lag_1,0.6070903480806079
+% Silica Concentrate_lag_3,0.09805286323528216
+% Silica Concentrate_lag_6,0.005045885112535638
+month,0.004001424035439284
+Ore Pulp Density_lag_1,0.003523073665194832
+Ore Pulp Density,0.0034109031454001727
+hour,0.0031350308905935685
+dayofweek,0.0031057467103887543
+Amina Flow,0.002875651798462187
+% Silica Concentrate_lag_12,0.0027195805757313793
+Flotation Column 03 Air Flow_roll_mean_6,0.0026708124697463705
+Ore Pulp pH_lag_3,0.0025342243477915463
+Flotation Column 03 Air Flow_roll_mean_12,0.002387274248606741
+Ore Pulp pH_lag_1,0.0023245031881087524
+Ore Pulp Density_roll_std_12,0.0021954984922089704
+Ore Pulp pH,0.0021866882774875655
+Ore Pulp pH_roll_mean_3,0.0021784020539104406
+Amina Flow_roll_std_6,0.0021509281013960967
+Starch Flow_lag_1,0.0021152861895373572
+% Iron Feed_roll_std_12,0.002103425708725165
+Ore Pulp pH_roll_std_3,0.002100422421937214
+% Silica Feed_roll_std_12,0.0020807940348090467
+Starch Flow_roll_std_12,0.002075701054340769
+Amina Flow_lag_12,0.0020681375427315215
+Ore Pulp Density_roll_mean_12,0.0020589719495614656
+Starch Flow_lag_12,0.0020567216492343317
+Ore Pulp Density_roll_mean_6,0.0020504652921313955
+day,0.001996102637963944
+Ore Pulp Density_diff_1,0.001993033979740757
+Amina Flow_roll_mean_3,0.0019919198640570178
+Ore Pulp pH_diff_1,0.0019493133556684283
+Ore Pulp Density_roll_std_6,0.0019492342805194198
+Ore Pulp pH_lag_6,0.0019401383409539915
+Amina Flow_lag_3,0.0019392353203103263
+Ore Pulp pH_roll_mean_6,0.0019210991762799706
+Flotation Column 02 Level_roll_std_6,0.0018930406265822693
+Ore Pulp pH_roll_std_12,0.0018759689509325102
+Amina Flow_roll_mean_6,0.0018709866971041217
+Amina Flow_lag_1,0.0018709589008685512
+Starch Flow_roll_std_6,0.0018671806495671255
+Starch Flow_roll_mean_3,0.0018611285860840085
+Flotation Column 01 Level_roll_std_12,0.0018581724874992037
+Starch Flow_roll_std_3,0.0018536766589750228
+Ore Pulp Density_roll_mean_3,0.0018488797879615496
+Flotation Column 02 Level_roll_std_12,0.0018460215481720204
+Starch Flow,0.0018407163722331018
+Flotation Column 01 Level_roll_std_6,0.001834090363763694
+Ore Pulp Density_lag_12,0.0018282895817821403
+Amina Flow_roll_std_12,0.0018178652500204521
+Starch Flow_lag_3,0.001808882353827976
+Ore Pulp pH_roll_std_6,0.0017945583926456384
+Flotation Column 03 Level_roll_std_12,0.0017803077463914101
+Ore Pulp pH_lag_12,0.0017715359009810765
+Amina Flow_roll_mean_12,0.0017516373017882865
+Starch Flow_roll_mean_6,0.0017316158356612517
+Amina Flow_diff_1,0.0017146647362294531
+Ore Pulp pH_roll_mean_12,0.0017137306327756397
+Ore Pulp Density_roll_std_3,0.0017110049263748019
+Amina Flow_roll_std_3,0.001701809052219517
+% Silica Feed,0.001651540329125621
+Ore Pulp Density_lag_6,0.0016455118284498926
+Flotation Column 05 Level_roll_std_12,0.0016319293760039245
+is_weekend,0.0016293867856919133
+Amina Flow_lag_6,0.001625496951869951
+% Silica Feed_lag_1,0.0016037722733497053
+% Iron Feed_roll_std_6,0.001586306267152168
+% Silica Feed_lag_12,0.001559011125655257
+Ore Pulp Density_lag_3,0.0015496213395788517
+Flotation Column 05 Level_lag_12,0.0015125587140704753
+Flotation Column 03 Level_roll_std_6,0.0014772969943474348
+Starch Flow_diff_1,0.001465413621469652
+Starch Flow_roll_mean_12,0.0014548077344169667
+Flotation Column 03 Level_lag_12,0.0014241796638359769
+Flotation Column 04 Air Flow_lag_12,0.0014237142614185593
+Starch Flow_lag_6,0.0014209511342817807
+% Silica Feed_lag_3,0.0013841501829187854
+Ore Pulp Flow_roll_std_12,0.0013834711876534122
+% Silica Feed_roll_std_6,0.001350812236429168
+% Silica Feed_roll_mean_3,0.0013474043411220193
+% Silica Feed_lag_6,0.0012938246825395714
+Flotation Column 02 Level_lag_12,0.001291248096566198
+Flotation Column 04 Level_roll_std_6,0.0012719692326249644
+% Silica Feed_roll_mean_12,0.0012557265295987544
+% Iron Feed_lag_1,0.0012480944911634083
+% Iron Feed_lag_12,0.0012474453511945318
+Flotation Column 02 Level_roll_std_3,0.001225476899695073
+Flotation Column 06 Level_lag_12,0.0012235379483679595
+Flotation Column 05 Level_roll_std_6,0.0012200219766752513
+% Iron Feed_lag_6,0.0012103074608694393
+Flotation Column 04 Level_roll_std_12,0.001204466295320126
+Flotation Column 07 Level_lag_12,0.0011976367511842942
+% Iron Feed_roll_mean_3,0.001194540697304111
+Flotation Column 01 Air Flow_roll_mean_12,0.0011853061309338487
+Flotation Column 01 Air Flow_roll_mean_6,0.0011797693957333608
+Flotation Column 04 Level_lag_12,0.0011572857604820032
+% Iron Feed_lag_3,0.0011526546925077316
+Flotation Column 03 Level_lag_6,0.0011447360119668129
+Ore Pulp Flow_roll_std_6,0.0011441354251391068
+Flotation Column 04 Level_roll_mean_6,0.0011423098008752311
+% Silica Feed_roll_mean_6,0.001130833621358533
+Flotation Column 04 Air Flow_roll_std_3,0.0011301854809004654
+Ore Pulp Flow_roll_std_3,0.001129155247642771
+% Iron Feed,0.0011102670030498963
+Flotation Column 04 Air Flow_roll_mean_12,0.0011094175827190144
+Flotation Column 05 Air Flow_roll_std_3,0.001100871529009242
+Flotation Column 04 Air Flow_lag_6,0.0010944636982273103
+Flotation Column 06 Air Flow_roll_std_3,0.001083220928693018
+% Iron Feed_roll_mean_6,0.0010823564082688823
+Flotation Column 01 Level_roll_std_3,0.0010775135397558977
+Ore Pulp Flow_diff_1,0.0010546084424829954
+Flotation Column 06 Level_roll_std_12,0.0010508311388908776
+Flotation Column 04 Level_roll_std_3,0.0010333868859769037
+Flotation Column 07 Level_roll_std_12,0.0010237221010978607
+Flotation Column 03 Air Flow,0.0009989668169117355
+Flotation Column 06 Level_roll_std_6,0.0009921853925810174
+Flotation Column 05 Air Flow_diff_1,0.000988348419574611
+Ore Pulp Flow_lag_12,0.0009831250930980113
+% Iron Feed_roll_mean_12,0.00098268299492909
+Flotation Column 06 Level,0.0009716168391956506
+Flotation Column 04 Level_roll_mean_12,0.0009572055444498003
+Flotation Column 06 Level_roll_mean_12,0.0009513103155945613
+Flotation Column 01 Level_lag_12,0.000948163154858705
+Flotation Column 04 Air Flow_diff_1,0.0009464224010919949
+Flotation Column 02 Air Flow_diff_1,0.0009298444978817394
+Flotation Column 03 Level_roll_std_3,0.0009200483015280999
+Flotation Column 04 Level_lag_6,0.000918759488338873
+Flotation Column 03 Air Flow_diff_1,0.0009153976967705863
+Flotation Column 05 Level_roll_mean_12,0.0009152121378103133
+Flotation Column 01 Level_lag_6,0.0009100669997313674
+Flotation Column 05 Air Flow_lag_6,0.0009059411505896096
+Flotation Column 01 Level_roll_mean_12,0.0009043482954102591
+Ore Pulp Flow,0.000903235289907824
+Flotation Column 07 Air Flow_diff_1,0.0009023732198358896
+Flotation Column 07 Air Flow_roll_std_3,0.000901178860239966
+Flotation Column 05 Air Flow_lag_12,0.0008864814382423237
+Ore Pulp Flow_lag_6,0.0008864201870426826
+Ore Pulp Flow_roll_mean_6,0.0008851410945677437
+Flotation Column 02 Level_lag_6,0.0008841662148677345
+Flotation Column 07 Level_roll_mean_12,0.000875881269264333
+Flotation Column 05 Level_roll_std_3,0.0008666257727001033
+Flotation Column 02 Level_roll_mean_6,0.0008655795834840634
+Flotation Column 03 Air Flow_lag_3,0.0008643956371525946
+Flotation Column 03 Level_lag_1,0.0008612975204268638
+Flotation Column 04 Air Flow_lag_3,0.000857211096736056
+Flotation Column 04 Air Flow_roll_mean_3,0.0008550465496263007
+Flotation Column 07 Level_roll_std_3,0.0008527138828763013
+% Iron Feed_diff_1,0.0008483983546360275
+Flotation Column 05 Air Flow_roll_std_12,0.000845904789317629
+Flotation Column 05 Air Flow_roll_std_6,0.0008404373881567016
+Flotation Column 02 Level_lag_1,0.000833598345441155
+Flotation Column 06 Level_roll_std_3,0.0008335544581146535
+Flotation Column 07 Level_lag_1,0.0008326885817217161
+Flotation Column 02 Level,0.0008319729287187109
+Ore Pulp Flow_lag_1,0.0008315790457991003
+Flotation Column 04 Level,0.0008307860481073457
+Flotation Column 06 Level_diff_1,0.0008288028965542101
+Flotation Column 01 Air Flow,0.0008260103983925877
+Flotation Column 01 Level_lag_3,0.0008253453320763169
+Flotation Column 02 Level_roll_mean_3,0.0008200482547552391
+Flotation Column 04 Level_roll_mean_3,0.0008193618559801228
+Flotation Column 07 Level,0.0008180185794261516
+Flotation Column 06 Air Flow_roll_std_6,0.0008154145688781307
+Flotation Column 04 Air Flow_roll_mean_6,0.0008103929808620465
+Flotation Column 04 Air Flow_roll_std_6,0.0008096571571797474
+Flotation Column 04 Air Flow_lag_1,0.00080871852363538
+Ore Pulp Flow_roll_mean_12,0.000808607837060929
+Flotation Column 07 Level_roll_std_6,0.0008050606183715079
+Ore Pulp Flow_lag_3,0.0008040585624993677
+Flotation Column 02 Level_lag_3,0.000800811370622254
+% Silica Feed_diff_1,0.0007949192164817156
+Flotation Column 05 Air Flow_lag_1,0.0007943491327913095
+Flotation Column 03 Level_roll_mean_3,0.0007851646396343646
+Flotation Column 05 Level_lag_6,0.0007821797186429641
+Flotation Column 03 Level,0.0007811549663982825
+Flotation Column 03 Level_roll_mean_12,0.00077967792328487
+Flotation Column 06 Level_lag_6,0.0007791252973199443
+Flotation Column 04 Level_lag_1,0.0007786584549363632
+Flotation Column 02 Air Flow_lag_12,0.0007745537664685992
+Flotation Column 02 Air Flow_roll_std_3,0.0007707664191181018
+Flotation Column 01 Air Flow_roll_mean_3,0.0007687546667172504
+Flotation Column 05 Air Flow_roll_mean_12,0.0007637754188719431
+Flotation Column 06 Level_roll_mean_6,0.0007633756588443721
+Flotation Column 02 Level_roll_mean_12,0.0007630396997990285
+Ore Pulp Flow_roll_mean_3,0.0007578942879035501
+Flotation Column 06 Level_lag_3,0.0007558044949239202
+Flotation Column 04 Air Flow_roll_std_12,0.0007525412284422911
+Flotation Column 01 Level_roll_mean_6,0.0007488030259578592
+Flotation Column 06 Air Flow_diff_1,0.0007453450005373562
+Flotation Column 04 Air Flow,0.0007408362875158754
+Flotation Column 06 Level_lag_1,0.0007403065802929388
+Flotation Column 05 Level_lag_1,0.0007393700017547786
+Flotation Column 03 Air Flow_roll_std_3,0.0007333011613197704
+Flotation Column 05 Air Flow_lag_3,0.0007284312706615071
+Flotation Column 05 Air Flow,0.0007239940616253875
+Flotation Column 06 Level_roll_mean_3,0.0007103752766517504
+Flotation Column 05 Level,0.0007077840687497121
+Flotation Column 07 Level_roll_mean_6,0.0007046340440771998
+Flotation Column 01 Level_roll_mean_3,0.0006988818222647418
+Flotation Column 07 Level_roll_mean_3,0.0006955557621823938
+Flotation Column 01 Level_lag_1,0.0006879810478922155
+Flotation Column 07 Level_diff_1,0.0006822873850678673
+Flotation Column 04 Level_lag_3,0.0006714924368036141
+Flotation Column 05 Level_diff_1,0.0006647195470809151
+Flotation Column 07 Level_lag_6,0.0006629009118471254
+Flotation Column 07 Air Flow_roll_std_12,0.0006544842507108067
+Flotation Column 07 Level_lag_3,0.0006519477803696665
+Flotation Column 05 Level_roll_mean_6,0.0006516929950299644
+Flotation Column 01 Level,0.0006470186312507507
+Flotation Column 03 Air Flow_lag_12,0.0006415430113137824
+Flotation Column 03 Level_lag_3,0.0006322934265234047
+Flotation Column 07 Air Flow_roll_std_6,0.0006209514544650063
+Flotation Column 03 Level_roll_mean_6,0.0006135851705741672
+Flotation Column 01 Air Flow_lag_1,0.0006081216375583102
+Flotation Column 02 Air Flow_roll_std_12,0.0005836897195985522
+Flotation Column 05 Air Flow_roll_mean_3,0.0005772710398031708
+Flotation Column 01 Air Flow_roll_std_3,0.000572999277118107
+Flotation Column 06 Air Flow_roll_std_12,0.0005723668898503155
+Flotation Column 04 Level_diff_1,0.0005603979315490233
+Flotation Column 05 Level_roll_mean_3,0.0005587611634793089
+Flotation Column 03 Air Flow_lag_1,0.0005509559915984302
+Flotation Column 03 Air Flow_roll_mean_3,0.0005489674632160805
+Flotation Column 05 Air Flow_roll_mean_6,0.0005433209365280178
+Flotation Column 01 Air Flow_roll_std_12,0.0005320133605378749
+Flotation Column 01 Air Flow_lag_12,0.000528020442971588
+Flotation Column 02 Air Flow_roll_std_6,0.0005201000736220515
+Flotation Column 05 Level_lag_3,0.0005048379702764958
+% Iron Feed_roll_std_3,0.0005045768061125921
+Flotation Column 02 Air Flow_roll_mean_12,0.0005010188959514058
+Flotation Column 03 Air Flow_roll_std_12,0.00048754109052130283
+Flotation Column 02 Level_diff_1,0.00048342954302204775
+Flotation Column 01 Air Flow_roll_std_6,0.00048333967911828174
+Flotation Column 03 Air Flow_roll_std_6,0.00046664001351540385
+Flotation Column 02 Air Flow,0.00045026172948165784
+Flotation Column 01 Air Flow_lag_3,0.000442681435108702
+Flotation Column 06 Air Flow_lag_6,0.00043588502773813157
+Flotation Column 01 Level_diff_1,0.0004317666694354866
+Flotation Column 01 Air Flow_diff_1,0.0004227107774090628
+Flotation Column 07 Air Flow,0.00041643797349227553
+Flotation Column 07 Air Flow_lag_12,0.0004125614042898529
+Flotation Column 07 Air Flow_lag_1,0.00039942799456586743
+Flotation Column 02 Air Flow_lag_6,0.0003909090010092364
+Flotation Column 02 Air Flow_lag_3,0.000376939125804669
+Flotation Column 07 Air Flow_lag_6,0.0003660786543319136
+Flotation Column 02 Air Flow_roll_mean_3,0.0003627388519307759
+Flotation Column 06 Air Flow,0.00036201694839924336
+Flotation Column 06 Air Flow_lag_12,0.0003598039317107801
+Flotation Column 02 Air Flow_lag_1,0.0003545910476574622
+Flotation Column 07 Air Flow_roll_mean_12,0.0003519521820860039
+Flotation Column 06 Air Flow_lag_1,0.0003409719644275824
+Flotation Column 06 Air Flow_roll_mean_12,0.0003382653388984627
+Flotation Column 06 Air Flow_lag_3,0.00032295535150527415
+Flotation Column 07 Air Flow_lag_3,0.0003120575530783854
+Flotation Column 07 Air Flow_roll_mean_3,0.0003089363086758507
+Flotation Column 03 Level_diff_1,0.00030025174146901956
+Flotation Column 02 Air Flow_roll_mean_6,0.0002974293887520125
+Flotation Column 06 Air Flow_roll_mean_6,0.0002929611937904915
+% Silica Feed_roll_std_3,0.0002915745706761296
+Flotation Column 06 Air Flow_roll_mean_3,0.000287045625983775
+Flotation Column 07 Air Flow_roll_mean_6,0.0002839995007397152
+Flotation Column 03 Air Flow_lag_6,0.00024374383638345207
+Flotation Column 01 Air Flow_lag_6,0.00023757335300475012

@@ -1,0 +1,4 @@
+feature,mean_abs_shap,pred_if_negative_step,pred_if_positive_step,lower_direction,higher_direction,best_lower_prediction,best_higher_prediction
+Ore Pulp pH,0.0057961945378914,2.2164,2.2164,1,-1,2.2164,2.2164
+Amina Flow,,2.2164,2.2164,1,-1,2.2164,2.2164
+Starch Flow,,2.2164,2.2164,1,-1,2.2164,2.2164

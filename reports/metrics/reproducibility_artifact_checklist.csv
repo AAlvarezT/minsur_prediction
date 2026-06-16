@@ -1,0 +1,11 @@
+artifact,expected_path,exists,purpose,risk_if_missing
+recommended_model,c:\Users\ADMIN\MINSUR\minsur_prediction\models\selected\model_lagged_lab_assumption.pkl,False,Primary model for inference under lagged-lab assumption.,No deployable primary model.
+recommended_feature_list,c:\Users\ADMIN\MINSUR\minsur_prediction\models\selected\feature_columns.json,True,Exact inference schema for primary model.,Inference schema mismatch risk.
+selected_model_metadata,c:\Users\ADMIN\MINSUR\minsur_prediction\models\selected\selected_model_metadata.json,True,"Selection rationale, metrics, assumptions.",Model selection is not auditable.
+strict_fallback_model,c:\Users\ADMIN\MINSUR\minsur_prediction\models\selected\model_strict_no_lab_input.pkl,False,Conservative fallback without lab lags.,No strict operational fallback.
+strict_fallback_feature_list,c:\Users\ADMIN\MINSUR\minsur_prediction\models\selected\feature_columns_strict_no_lab_input.json,True,Exact inference schema for fallback model.,Fallback inference schema mismatch risk.
+baseline_metrics,c:\Users\ADMIN\MINSUR\minsur_prediction\reports\metrics\baseline_metrics.json,True,Baseline performance reference.,No benchmark for model lift.
+scenario_parameters,c:\Users\ADMIN\MINSUR\minsur_prediction\reports\metrics\scenario_parameters.json,True,What-if scenario parameter traceability.,Scenario analysis is not reproducible.
+top_shap_features,c:\Users\ADMIN\MINSUR\minsur_prediction\reports\metrics\top_shap_features.csv,False,Explainability driver evidence.,No traceable global explainability outputs.
+scenario_results,c:\Users\ADMIN\MINSUR\minsur_prediction\reports\metrics\scenario_results.csv,False,What-if scenario outcome table.,No scenario impact audit trail.
+experiment_log,c:\Users\ADMIN\MINSUR\minsur_prediction\reports\metrics\experiment_log.csv,False,Local experiment fallback log.,Reduced reproducibility when MLflow is unavailable.

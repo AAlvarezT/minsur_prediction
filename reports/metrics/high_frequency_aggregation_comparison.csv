@@ -1,0 +1,26 @@
+scenario,model,val_MAE,val_RMSE,val_R2,test_MAE,test_RMSE,test_R2,improve_rmse_vs_mean_baseline_pct,improve_rmse_vs_persistence_baseline_pct
+current_hourly_baseline,Random Forest,0.7334,0.9761,0.1108,0.8902,1.1426,0.09,5.0,
+current_hourly_baseline,Extra Trees,0.7407,1.0123,0.0436,0.9354,1.2118,-0.0237,-0.76,
+current_hourly_baseline,XGBoost,0.7897,1.0151,0.0383,0.9612,1.1789,0.0313,1.98,
+current_hourly_baseline,LightGBM,0.7546,1.0261,0.0173,0.9271,1.2025,-0.008,0.02,
+current_hourly_baseline,Mean baseline,0.7918,1.0363,-0.0022,0.9929,1.2027,-0.0084,0.0,
+current_hourly_baseline,Ridge,0.8781,1.1851,-0.3108,1.2336,1.6566,-0.9129,-37.74,
+lagged_lab_plus_sensor_aggregated,Persistence baseline,0.3936,0.6507,0.6048,0.473,0.7614,0.5965,36.75,0.0
+lagged_lab_plus_sensor_aggregated,Ridge,0.4566,0.6579,0.596,0.5663,0.8121,0.541,32.54,-6.66
+lagged_lab_plus_sensor_aggregated,Random Forest,0.4775,0.6629,0.5898,0.5409,0.7399,0.619,38.54,2.82
+lagged_lab_plus_sensor_aggregated,Extra Trees,0.4778,0.6657,0.5863,0.5582,0.7537,0.6046,37.39,1.01
+lagged_lab_plus_sensor_aggregated,LightGBM,0.5567,0.7434,0.4842,0.6047,0.7909,0.5647,34.3,-3.87
+lagged_lab_plus_sensor_aggregated,XGBoost,0.6888,0.851,0.3241,0.6941,0.8612,0.4837,28.46,-13.11
+lagged_lab_plus_sensor_aggregated,Mean baseline,0.7912,1.0362,-0.0022,0.9938,1.2038,-0.0086,0.0,-58.1
+sensor_only_hourly_aggregated,Random Forest,0.7186,0.9672,0.127,0.8921,1.1197,0.126,6.9,
+sensor_only_hourly_aggregated,Extra Trees,0.7215,1.003,0.0612,0.9119,1.1719,0.0427,2.56,
+sensor_only_hourly_aggregated,Mean baseline,0.7918,1.0363,-0.0022,0.9929,1.2027,-0.0084,0.0,
+sensor_only_hourly_aggregated,XGBoost,0.8181,1.0532,-0.0353,0.9234,1.1294,0.1109,6.09,
+sensor_only_hourly_aggregated,LightGBM,0.7601,1.065,-0.0586,0.8829,1.1408,0.0927,5.15,
+sensor_only_hourly_aggregated,Ridge,0.9168,1.2377,-0.4298,1.3502,1.7926,-1.24,-49.05,
+sensor_only_hourly_aggregated_with_lags,Random Forest,0.7415,0.9855,0.0931,0.9185,1.1454,0.0865,4.81,
+sensor_only_hourly_aggregated_with_lags,Extra Trees,0.7467,0.9954,0.0746,0.9386,1.1477,0.0827,4.62,
+sensor_only_hourly_aggregated_with_lags,Mean baseline,0.7914,1.0359,-0.0021,0.9937,1.2033,-0.0083,0.0,
+sensor_only_hourly_aggregated_with_lags,LightGBM,0.8061,1.0478,-0.0254,0.995,1.2267,-0.0478,-1.94,
+sensor_only_hourly_aggregated_with_lags,XGBoost,0.867,1.0807,-0.0908,0.9817,1.1762,0.0367,2.25,
+sensor_only_hourly_aggregated_with_lags,Ridge,1.5267,1.9554,-2.5709,3.3846,4.4051,-12.5129,-266.08,

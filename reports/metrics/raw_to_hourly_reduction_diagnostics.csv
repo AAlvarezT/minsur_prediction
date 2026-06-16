@@ -1,0 +1,2 @@
+raw_rows,rows_pipeline_cleaned_if_available,rows_unique_hour_buckets,rows_after_exact_drop_duplicates,rows_after_drop_duplicates_by_hour_keep_first,median_sensor_rows_per_hour,mean_sensor_rows_per_hour,p10_sensor_rows_per_hour,p90_sensor_rows_per_hour,info_loss_vs_hour_unique_pct,info_loss_vs_hour_first_dropdup_pct
+737453,4097,4097,736282,4097,180.0,179.99829143275568,180.0,180.0,99.44,99.44

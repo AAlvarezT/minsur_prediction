@@ -1,0 +1,5 @@
+base_case_id,index,timestamp,actual_value,base_prediction,absolute_error,predicted_silica_percentile
+median_quality_case,2017-09-09 03:00:00,2017-09-09 03:00:00,3.07,2.2164,0.8536,0.5008
+high_silica_case,2017-08-28 17:00:00,2017-08-28 17:00:00,5.53,2.2382,3.2918,0.5171
+low_silica_case,2017-08-21 05:00:00,2017-08-21 05:00:00,0.84,1.5657,0.7257,0.1268
+high_error_case,2017-08-18 06:00:00,2017-08-18 06:00:00,5.27,1.4629,3.8071,0.0829

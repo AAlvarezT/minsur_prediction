@@ -1,0 +1,8 @@
+feature_group,example_features,available_in_dataset,available_at_inference,risk_level,required_action
+Target lag 1,% Silica Concentrate_lag_1,yes,depends_on_lab_SLA,high,"Auditar timestamps (muestra, resultado, publicacion) y usar solo si esta disponible antes del cutoff de inferencia"
+Target lags mayores,% Silica Concentrate_lag_3|% Silica Concentrate_lag_6|% Silica Concentrate_lag_12,yes,depends_on_lab_SLA,high,"Validar politica de disponibilidad y envejecimiento de dato de laboratorio"
+Sensores agregados por hora,mean/std/min/max/range/last por hora,yes,yes_if_window_closed,medium,"Definir ventana cerrada y cutoff de inferencia para evitar leakage operacional"
+Variables feed,% Iron Feed|% Silica Feed|Ore Pulp Flow,yes,depends_on_online_tags,medium,"Verificar disponibilidad online, latencia y calidad de tags"
+pH y reactivos,Ore Pulp pH|Amina Flow|Starch Flow,yes,depends_on_online_tags,medium,"Validar frecuencia, latencia y reconciliacion de unidades"
+Rolling features,rolling_mean_*|rolling_std_*|diff_*,yes,yes_if_history_buffer_exists,medium,"Garantizar buffer historico consistente y recomputo deterministico en inferencia"
+Calendar features,hour|day|month|dayofweek|is_weekend,yes,yes,low,"Alinear timezone y granularidad horaria"

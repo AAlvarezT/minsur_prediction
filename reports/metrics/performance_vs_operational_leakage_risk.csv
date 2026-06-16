@@ -1,0 +1,25 @@
+Scenario,Model,MAE,RMSE,R2,RMSE improvement vs baseline (%),Uses feed variables,Uses target lags,Operational Leakage Risk,Final Decision
+Feed ON + TargetLags ON,Extra Trees Regressor,0.4814,0.6629,0.5899,36.11,True,True,Conditional — valid if the latest lab result is already available before inference,Best statistical model + Recommended under lagged-lab availability
+Feed ON + TargetLags ON,Random Forest,0.4949,0.6666,0.5852,35.75,True,True,Conditional — valid if the latest lab result is already available before inference,Alternative benchmark
+Feed ON + TargetLags ON,Ridge,0.568,0.7462,0.4803,28.08,True,True,Conditional — valid if the latest lab result is already available before inference,Alternative benchmark
+Feed ON + TargetLags ON,LightGBM,0.5962,0.7569,0.4653,27.05,True,True,Conditional — valid if the latest lab result is already available before inference,Alternative benchmark
+Feed ON + TargetLags ON,XGBoost,0.6733,0.8354,0.3486,19.48,True,True,Conditional — valid if the latest lab result is already available before inference,Alternative benchmark
+Feed ON + TargetLags ON,Baseline (Mean),0.7925,1.0364,-0.0024,0.11,True,True,Conditional — valid if the latest lab result is already available before inference,Alternative benchmark
+Feed ON + TargetLags OFF,Random Forest,0.8188,1.0291,0.0115,0.81,True,False,"Lower — no lagged lab input, but feed availability must hold online",Strict no-lab-input fallback
+Feed ON + TargetLags OFF,LightGBM,0.8048,1.0292,0.0115,0.8,True,False,"Lower — no lagged lab input, but feed availability must hold online",Alternative benchmark
+Feed ON + TargetLags OFF,Baseline (Mean),0.7925,1.0364,-0.0024,0.11,True,False,"Lower — no lagged lab input, but feed availability must hold online",Alternative benchmark
+Feed ON + TargetLags OFF,XGBoost,0.9094,1.1284,-0.1884,-8.76,True,False,"Lower — no lagged lab input, but feed availability must hold online",Alternative benchmark
+Feed ON + TargetLags OFF,Extra Trees Regressor,0.9457,1.1878,-0.3169,-14.49,True,False,"Lower — no lagged lab input, but feed availability must hold online",Alternative benchmark
+Feed ON + TargetLags OFF,Ridge,1.1027,1.4561,-0.9789,-40.35,True,False,"Lower — no lagged lab input, but feed availability must hold online",Alternative benchmark
+Feed OFF + TargetLags ON,Extra Trees Regressor,0.4868,0.6651,0.5872,35.89,False,True,Conditional — valid if the latest lab result is already available before inference,Alternative benchmark
+Feed OFF + TargetLags ON,Random Forest,0.501,0.6708,0.58,35.34,False,True,Conditional — valid if the latest lab result is already available before inference,Alternative benchmark
+Feed OFF + TargetLags ON,LightGBM,0.5856,0.7479,0.4779,27.91,False,True,Conditional — valid if the latest lab result is already available before inference,Alternative benchmark
+Feed OFF + TargetLags ON,Ridge,0.5705,0.7503,0.4746,27.68,False,True,Conditional — valid if the latest lab result is already available before inference,Alternative benchmark
+Feed OFF + TargetLags ON,XGBoost,0.6585,0.8157,0.379,21.38,False,True,Conditional — valid if the latest lab result is already available before inference,Alternative benchmark
+Feed OFF + TargetLags ON,Baseline (Mean),0.7925,1.0364,-0.0024,0.11,False,True,Conditional — valid if the latest lab result is already available before inference,Alternative benchmark
+Feed OFF + TargetLags OFF,Baseline (Mean),0.7925,1.0364,-0.0024,0.11,False,False,Lower — no lagged lab input and process variables only,Alternative benchmark
+Feed OFF + TargetLags OFF,Random Forest,0.8256,1.0373,-0.0042,0.02,False,False,Lower — no lagged lab input and process variables only,Alternative benchmark
+Feed OFF + TargetLags OFF,LightGBM,0.8015,1.0587,-0.0461,-2.04,False,False,Lower — no lagged lab input and process variables only,Alternative benchmark
+Feed OFF + TargetLags OFF,Extra Trees Regressor,0.927,1.1701,-0.2778,-12.78,False,False,Lower — no lagged lab input and process variables only,Alternative benchmark
+Feed OFF + TargetLags OFF,XGBoost,0.9557,1.1812,-0.3021,-13.85,False,False,Lower — no lagged lab input and process variables only,Alternative benchmark
+Feed OFF + TargetLags OFF,Ridge,1.124,1.4768,-1.0354,-42.34,False,False,Lower — no lagged lab input and process variables only,Alternative benchmark

@@ -1,0 +1,6 @@
+endpoint,method,purpose,input,output,validation
+/health,GET,Check service and artifact availability,None,status metadata_found model_artifacts_found feature_files_found available_model_roles,Status only
+/model-info,GET,Expose target model portfolio and operating assumptions,None,target recommended_model available_model_roles metrics operational_assumptions warnings,Metadata-based response
+/features,GET,Return feature contract for a model role,model_role query param,model_role n_features feature_columns target_lag_features process_features uses_target_lags,404 if role missing; 500 if features fail to load
+/predict,POST,Run reproducible inference for % Silica Concentrate,model_role features dict,target prediction model_role uses_target_lags operational_assumption warnings validation,404 invalid role; 400 invalid input; 500 model load failure
+/simulate,POST,Run predictive sensitivity analysis,model_role base_features modifications,target base_prediction scenario_prediction delta_prediction delta_prediction_pct modified_features warnings disclaimer,404 invalid role; 400 invalid input; 500 model load failure

@@ -1,0 +1,12 @@
+item,status,comment
+temporal validation,done,Temporal split and lagged evaluation already validated
+feature contract,done,Feature columns are versioned and loaded from selected artifacts
+selected model metadata,done,Selected model metadata available in JSON
+fallback model,done,Strict no-lab fallback exists and is exposed
+explainability artifacts,done,SHAP and summary figures available as static evidence
+MLflow tracking,done,Local mlruns tracking and audit CSVs available
+API endpoints,done,FastAPI endpoints for health info features predict and simulate
+input validation,done,Missing extra null and non-numeric checks implemented
+error handling,done,HTTP 400 404 and 500 paths implemented
+pending drift monitoring,pending,Not implemented yet
+pending model registry,pending,No formal registry stage or aliasing yet

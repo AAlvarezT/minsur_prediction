@@ -1,0 +1,3 @@
+finding,evidence,implication,recommended_use
+Largest prediction shifts come from recent-lab-trend scenarios,"[{'scenario_name': 'recent lab silica trend +0.2 pp', 'mean_delta_prediction': 0.11762500000000001}, {'scenario_name': 'recent lab silica trend -0.2 pp', 'mean_delta_prediction': -0.0789}]","Treat as availability/trend stress tests, not direct operational levers.",exploratory_not_operational_recommendation
+Cross-model directional agreement is limited when lab lags are removed,0.375,Scenario interpretation is model-assumption dependent under strict no-lag constraints.,decision_support_with_high_caution
